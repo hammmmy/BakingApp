@@ -6,7 +6,7 @@ import android.os.Parcelable.Creator;
 
 public class Ingredient implements Parcelable
 {
-    private int quantity;
+    private float quantity;
     private String measure;
     private String ingredient;
     public final static Parcelable.Creator<Ingredient> CREATOR = new Creator<Ingredient>() {
@@ -17,7 +17,7 @@ public class Ingredient implements Parcelable
         })
         public Ingredient createFromParcel(Parcel in) {
             Ingredient instance = new Ingredient();
-            instance.quantity = ((int) in.readValue((int.class.getClassLoader())));
+            instance.quantity = ((float) in.readValue((int.class.getClassLoader())));
             instance.measure = ((String) in.readValue((String.class.getClassLoader())));
             instance.ingredient = ((String) in.readValue((String.class.getClassLoader())));
             return instance;
@@ -30,11 +30,11 @@ public class Ingredient implements Parcelable
     }
             ;
 
-    public int getQuantity() {
+    public float getQuantity() {
         return quantity;
     }
 
-    public void setQuantity(int quantity) {
+    public void setQuantity(float quantity) {
         this.quantity = quantity;
     }
 
