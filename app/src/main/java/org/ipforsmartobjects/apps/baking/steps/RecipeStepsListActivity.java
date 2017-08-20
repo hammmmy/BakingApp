@@ -1,4 +1,4 @@
-package org.ipforsmartobjects.apps.baking;
+package org.ipforsmartobjects.apps.baking.steps;
 
 import android.content.Context;
 import android.content.Intent;
@@ -15,7 +15,10 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 
-import org.ipforsmartobjects.apps.baking.dummy.DummyContent;
+import org.ipforsmartobjects.apps.baking.R;
+import org.ipforsmartobjects.apps.baking.stepdetail.RecipeStepDetailActivity;
+import org.ipforsmartobjects.apps.baking.stepdetail.RecipeStepDetailFragment;
+import org.ipforsmartobjects.apps.baking.data.dummy.DummyContent;
 
 import java.util.List;
 
@@ -23,11 +26,11 @@ import java.util.List;
  * An activity representing a list of Recipes. This activity
  * has different presentations for handset and tablet-size devices. On
  * handsets, the activity presents a list of items, which when touched,
- * lead to a {@link RecipeDetailActivity} representing
+ * lead to a {@link RecipeStepDetailActivity} representing
  * item details. On tablets, the activity presents the list of items and
  * item details side-by-side using two vertical panes.
  */
-public class RecipeListActivity extends AppCompatActivity {
+public class RecipeStepsListActivity extends AppCompatActivity {
 
     /**
      * Whether or not the activity is in two-pane mode, i.e. running on a tablet
@@ -97,16 +100,16 @@ public class RecipeListActivity extends AppCompatActivity {
                 public void onClick(View v) {
                     if (mTwoPane) {
                         Bundle arguments = new Bundle();
-                        arguments.putString(RecipeDetailFragment.ARG_ITEM_ID, holder.mItem.id);
-                        RecipeDetailFragment fragment = new RecipeDetailFragment();
+                        arguments.putString(RecipeStepDetailFragment.ARG_ITEM_ID, holder.mItem.id);
+                        RecipeStepDetailFragment fragment = new RecipeStepDetailFragment();
                         fragment.setArguments(arguments);
                         getSupportFragmentManager().beginTransaction()
                                 .replace(R.id.recipe_detail_container, fragment)
                                 .commit();
                     } else {
                         Context context = v.getContext();
-                        Intent intent = new Intent(context, RecipeDetailActivity.class);
-                        intent.putExtra(RecipeDetailFragment.ARG_ITEM_ID, holder.mItem.id);
+                        Intent intent = new Intent(context, RecipeStepDetailActivity.class);
+                        intent.putExtra(RecipeStepDetailFragment.ARG_ITEM_ID, holder.mItem.id);
 
                         context.startActivity(intent);
                     }
@@ -128,8 +131,8 @@ public class RecipeListActivity extends AppCompatActivity {
             public ViewHolder(View view) {
                 super(view);
                 mView = view;
-                mIdView = (TextView) view.findViewById(R.id.id);
-                mContentView = (TextView) view.findViewById(R.id.content);
+                mIdView = view.findViewById(R.id.id);
+                mContentView = view.findViewById(R.id.content);
             }
 
             @Override

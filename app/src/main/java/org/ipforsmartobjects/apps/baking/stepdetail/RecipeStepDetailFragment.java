@@ -1,4 +1,4 @@
-package org.ipforsmartobjects.apps.baking;
+package org.ipforsmartobjects.apps.baking.stepdetail;
 
 import android.app.Activity;
 import android.support.design.widget.CollapsingToolbarLayout;
@@ -9,15 +9,17 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import org.ipforsmartobjects.apps.baking.dummy.DummyContent;
+import org.ipforsmartobjects.apps.baking.R;
+import org.ipforsmartobjects.apps.baking.data.dummy.DummyContent;
+import org.ipforsmartobjects.apps.baking.steps.RecipeStepsListActivity;
 
 /**
  * A fragment representing a single Recipe detail screen.
- * This fragment is either contained in a {@link RecipeListActivity}
- * in two-pane mode (on tablets) or a {@link RecipeDetailActivity}
+ * This fragment is either contained in a {@link RecipeStepsListActivity}
+ * in two-pane mode (on tablets) or a {@link RecipeStepDetailActivity}
  * on handsets.
  */
-public class RecipeDetailFragment extends Fragment {
+public class RecipeStepDetailFragment extends Fragment {
     /**
      * The fragment argument representing the item ID that this fragment
      * represents.
@@ -33,7 +35,7 @@ public class RecipeDetailFragment extends Fragment {
      * Mandatory empty constructor for the fragment manager to instantiate the
      * fragment (e.g. upon screen orientation changes).
      */
-    public RecipeDetailFragment() {
+    public RecipeStepDetailFragment() {
     }
 
     @Override
@@ -47,7 +49,7 @@ public class RecipeDetailFragment extends Fragment {
             mItem = DummyContent.ITEM_MAP.get(getArguments().getString(ARG_ITEM_ID));
 
             Activity activity = this.getActivity();
-            CollapsingToolbarLayout appBarLayout = (CollapsingToolbarLayout) activity.findViewById(R.id.toolbar_layout);
+            CollapsingToolbarLayout appBarLayout = activity.findViewById(R.id.toolbar_layout);
             if (appBarLayout != null) {
                 appBarLayout.setTitle(mItem.content);
             }

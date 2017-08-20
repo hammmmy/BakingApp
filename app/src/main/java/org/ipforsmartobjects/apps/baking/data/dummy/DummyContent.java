@@ -1,4 +1,4 @@
-package org.ipforsmartobjects.apps.baking.dummy;
+package org.ipforsmartobjects.apps.baking.data.dummy;
 
 import java.util.ArrayList;
 import java.util.HashMap;
