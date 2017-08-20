@@ -5,7 +5,7 @@ android {
     buildToolsVersion "26.0.1"
     defaultConfig {
         applicationId "org.ipforsmartobjects.apps.baking"
-        minSdkVersion 15
+        minSdkVersion 16
         targetSdkVersion 26
         versionCode 1
         versionName "1.0"
@@ -19,13 +19,29 @@ android {
     }
 }
 
+ext {
+    supportLibVersion = '26.0.1'
+    picassoVersion = '2.5.2'
+    retrofitVersion = '2.3.0'
+    gsonVersion = '2.8.1'
+    guavaVersion = '23.0'
+}
+
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
-    implementation 'com.android.support:appcompat-v7:26.0.1'
-    implementation 'com.android.support:support-v4:26.0.1'
-    implementation 'com.android.support:recyclerview-v7:26.0.1'
-    implementation 'com.android.support:design:26.0.1'
+    implementation "com.android.support:appcompat-v7:${supportLibVersion}"
+    implementation "com.android.support:support-v4:${supportLibVersion}"
+    implementation "com.android.support:recyclerview-v7:${supportLibVersion}"
+    implementation "com.android.support:design:${supportLibVersion}"
+    implementation "com.google.code.gson:gson:${gsonVersion}"
+    implementation "com.google.guava:guava:${guavaVersion}"
+    implementation "com.squareup.picasso:picasso:${picassoVersion}"
+    implementation "com.squareup.retrofit2:retrofit:${retrofitVersion}"
+    implementation "com.squareup.retrofit2:converter-gson:${retrofitVersion}"
+
+    implementation 'com.google.code.findbugs:jsr305:2.0.1'
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'com.android.support.test:runner:1.0.0'
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.0'
+
 }
