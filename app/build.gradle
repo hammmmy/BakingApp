@@ -17,10 +17,13 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
+    dataBinding {
+        enabled = true
+    }
 }
 
 ext {
-    supportLibVersion = '26.0.1'
+    supportLibVersion = '26.0.2'
     picassoVersion = '2.5.2'
     retrofitVersion = '2.3.0'
     gsonVersion = '2.8.1'
@@ -33,6 +36,7 @@ dependencies {
     implementation "com.android.support:support-v4:${supportLibVersion}"
     implementation "com.android.support:recyclerview-v7:${supportLibVersion}"
     implementation "com.android.support:design:${supportLibVersion}"
+    implementation "com.android.support:cardview-v7:${supportLibVersion}"
     implementation "com.google.code.gson:gson:${gsonVersion}"
     implementation "com.google.guava:guava:${guavaVersion}"
     implementation "com.squareup.picasso:picasso:${picassoVersion}"
@@ -40,8 +44,9 @@ dependencies {
     implementation "com.squareup.retrofit2:converter-gson:${retrofitVersion}"
 
     implementation 'com.google.code.findbugs:jsr305:2.0.1'
+    implementation 'com.android.support.constraint:constraint-layout:1.0.2'
     testImplementation 'junit:junit:4.12'
-    androidTestImplementation 'com.android.support.test:runner:1.0.0'
-    androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.0'
+    androidTestImplementation 'com.android.support.test:runner:1.0.1'
+    androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.1'
 
 }

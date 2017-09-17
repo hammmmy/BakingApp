@@ -28,9 +28,9 @@ public class RecipeListingApiImpl implements RecipeListingApiHelper.RecipeListin
     private static final String TAG = "RecipeListingApiImplWit";
     @Override
     public Call<List<Recipe>> getRecipeList() {
-        Call<List<Recipe>> popularMovieCall = mApi.getRecipeList();
+        Call<List<Recipe>> recipeList = mApi.getRecipeList();
 
-        popularMovieCall.enqueue(new Callback<List<Recipe>>() {
+        recipeList.enqueue(new Callback<List<Recipe>>() {
             @Override
             public void onResponse(Call<List<Recipe>> call, Response<List<Recipe>> response) {
                 if (response.isSuccessful()) {

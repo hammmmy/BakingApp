@@ -17,8 +17,6 @@ public interface RecipesContract {
 
         void showRecipes(List<Recipe> recipes);
 
-        void showErrorView();
-
         void showEmptyView();
 
         void showRecipeSteps(long recipeId);
