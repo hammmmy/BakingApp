@@ -1,22 +1,14 @@
 package org.ipforsmartobjects.apps.baking.data;
 
-import android.content.Context;
-import android.util.Log;
-
 import org.ipforsmartobjects.apps.baking.util.RecipeListingApiHelper;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-/**
- * Created by Hamid on 3/5/2017.
- */
-
-public class RecipeListingApiImpl implements RecipeListingApiHelper.RecipeListingApi {
+public class RecipeListingApiImpl implements RecipesServiceApi {
 
     private final RecipeListingApiHelper.RecipeListingApi mApi;
 
@@ -26,27 +18,27 @@ public class RecipeListingApiImpl implements RecipeListingApiHelper.RecipeListin
     }
 
     private static final String TAG = "RecipeListingApiImplWit";
-    @Override
-    public Call<List<Recipe>> getRecipeList() {
-        Call<List<Recipe>> recipeList = mApi.getRecipeList();
 
-        recipeList.enqueue(new Callback<List<Recipe>>() {
+    @Override
+    public void getRecipes(final MoviesServiceCallback<List<Recipe>> callback) {
+        Call<List<Recipe>> popularMovieCall = mApi.getRecipeList();
+        // retrofit 2 without Rx code
+        popularMovieCall.enqueue(new Callback<List<Recipe>>() {
             @Override
             public void onResponse(Call<List<Recipe>> call, Response<List<Recipe>> response) {
                 if (response.isSuccessful()) {
-                    final List<Recipe> list = response.body();
-                    Log.d(TAG, "onResponse: success");
+                    List<Recipe> recipes = response.body();
+                    callback.onLoaded(recipes);
                 } else {
-                    Log.d(TAG, "onResponse: failure");
+                    callback.onLoadingFailed();
                 }
             }
 
             @Override
             public void onFailure(Call<List<Recipe>> call, Throwable t) {
-                Log.d(TAG, "onFailure: ");
+                callback.onLoadingFailed();
             }
         });
-        return null;
-    }
 
+    }
 }

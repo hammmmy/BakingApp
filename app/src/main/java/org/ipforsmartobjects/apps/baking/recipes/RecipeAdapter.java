@@ -49,7 +49,7 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.ViewHolder
         }
 
         viewHolder.mRecipeViewBinding.recipeName.setText(recipe.getName());
-        viewHolder.mRecipeViewBinding.recipeServings.setText(recipe.getServings());
+        viewHolder.mRecipeViewBinding.recipeServings.setText("" + recipe.getServings());
     }
 
     public void replaceData(List<Recipe> Recipes) {

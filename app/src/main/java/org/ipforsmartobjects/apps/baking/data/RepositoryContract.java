@@ -13,7 +13,7 @@ public interface RepositoryContract {
         void clearCache();
 
         interface LoadRecipesCallback {
-            void onRecipeLoaded(List<Recipe> recipes);
+            void onRecipesLoaded(List<Recipe> recipes);
 
             void onLoadingFailed();
         }

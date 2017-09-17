@@ -11,6 +11,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.TextView;
 
+import org.ipforsmartobjects.apps.baking.Injection;
 import org.ipforsmartobjects.apps.baking.R;
 import org.ipforsmartobjects.apps.baking.data.Recipe;
 import org.ipforsmartobjects.apps.baking.databinding.ActivityRecipeCardGridBinding;
@@ -26,6 +27,7 @@ public class RecipeCardGridActivity extends AppCompatActivity implements Recipes
     private RecipeAdapter mListAdapter;
     private RecipesContract.Presenter mActionsListener;
     private TextView mEmptyView;
+    private TextView mErrorView;
 
     private final RecipeItemListener mItemListener = new RecipeItemListener() {
         @Override
@@ -42,13 +44,23 @@ public class RecipeCardGridActivity extends AppCompatActivity implements Recipes
 
         setSupportActionBar(mBinding.toolbar);
 
+        mActionsListener = new RecipesPresenter(this, Injection.provideRecipesRepository());
         RecyclerView recyclerView = mBinding.recipeGridLayoutContainer.recipeGrid;
         assert recyclerView != null;
         recyclerView.setHasFixedSize(true);
         recyclerView.setItemViewCacheSize(20); // for faster scroll (?)
         setupRecyclerView(recyclerView);
+        mListView = mBinding.recipeGridLayoutContainer.recipeGrid;
         mEmptyView = mBinding.recipeGridLayoutContainer.emptyView;
+        mErrorView = mBinding.recipeGridLayoutContainer.errorView;
     }
+
+    @Override
+    protected void onResume() {
+        mActionsListener.loadRecipes(false);
+        super.onResume();
+    }
+
 
     private void setupRecyclerView(@NonNull RecyclerView recyclerView) {
         mListAdapter = new RecipeAdapter(new ArrayList<Recipe>(0), mItemListener);
@@ -64,6 +76,8 @@ public class RecipeCardGridActivity extends AppCompatActivity implements Recipes
     public void showRecipes(List<Recipe> recipes) {
         mListView.setVisibility(View.VISIBLE);
         mEmptyView.setVisibility(View.GONE);
+        mErrorView.setVisibility(View.GONE);
+
         mListAdapter.replaceData(recipes);
 
     }
@@ -72,6 +86,15 @@ public class RecipeCardGridActivity extends AppCompatActivity implements Recipes
     public void showEmptyView() {
         mListView.setVisibility(View.GONE);
         mEmptyView.setVisibility(View.VISIBLE);
+        mErrorView.setVisibility(View.GONE);
+
+    }
+
+    @Override
+    public void showErrorView() {
+        mListView.setVisibility(View.GONE);
+        mEmptyView.setVisibility(View.GONE);
+        mErrorView.setVisibility(View.VISIBLE);
     }
 
     @Override
