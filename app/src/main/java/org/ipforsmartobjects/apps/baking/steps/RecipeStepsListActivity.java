@@ -2,13 +2,12 @@ package org.ipforsmartobjects.apps.baking.steps;
 
 import android.content.Context;
 import android.content.Intent;
+import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,6 +15,7 @@ import android.widget.TextView;
 
 
 import org.ipforsmartobjects.apps.baking.R;
+import org.ipforsmartobjects.apps.baking.databinding.ActivityRecipeStepListBinding;
 import org.ipforsmartobjects.apps.baking.stepdetail.RecipeStepDetailActivity;
 import org.ipforsmartobjects.apps.baking.stepdetail.RecipeStepDetailFragment;
 import org.ipforsmartobjects.apps.baking.data.dummy.DummyContent;
@@ -38,36 +38,24 @@ public class RecipeStepsListActivity extends AppCompatActivity {
      * device.
      */
     private boolean mTwoPane;
+    ActivityRecipeStepListBinding mBinding;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_recipe_list);
+        mBinding = DataBindingUtil.setContentView(RecipeStepsListActivity.this,
+                R.layout.activity_recipe_step_list);
 
-        Toolbar toolbar = findViewById(R.id.toolbar);
+        mTwoPane = getResources().getBoolean(R.bool.is_two_pane);
+
+        Toolbar toolbar = mBinding.toolbar;
         setSupportActionBar(toolbar);
         toolbar.setTitle(getTitle());
-
-        FloatingActionButton fab = findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-            }
-        });
 
         View recyclerView = findViewById(R.id.recipe_list);
         assert recyclerView != null;
         setupRecyclerView((RecyclerView) recyclerView);
 
-        if (findViewById(R.id.recipe_detail_container) != null) {
-            // The detail container view will be present only in the
-            // large-screen layouts (res/values-w900dp).
-            // If this view is present, then the
-            // activity should be in two-pane mode.
-            mTwoPane = true;
-        }
     }
 
     private void setupRecyclerView(@NonNull RecyclerView recyclerView) {
@@ -86,7 +74,7 @@ public class RecipeStepsListActivity extends AppCompatActivity {
         @Override
         public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
             View view = LayoutInflater.from(parent.getContext())
-                    .inflate(R.layout.recipe_list_content, parent, false);
+                    .inflate(R.layout.recipe_step_list_item, parent, false);
             return new ViewHolder(view);
         }
 
