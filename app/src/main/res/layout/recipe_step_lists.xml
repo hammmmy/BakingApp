@@ -2,29 +2,67 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
-    <LinearLayout
+    <android.support.v4.widget.SwipeRefreshLayout
+        android:id="@+id/refresh_layout"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical">
+        android:layout_height="match_parent">
 
-        <android.support.v7.widget.RecyclerView
-            android:id="@+id/ingredient_list"
+        <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="16dp"
-            android:layout_marginRight="16dp"
-            app:layoutManager="LinearLayoutManager"
-            tools:context="org.ipforsmartobjects.apps.baking.steps.RecipeStepsListActivity"
-            tools:listitem="@layout/recipe_ingredient_list_item" />
+            android:layout_height="match_parent">
 
-        <android.support.v7.widget.RecyclerView
-            android:id="@+id/recipe_list"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="16dp"
-            android:layout_marginRight="16dp"
-            app:layoutManager="LinearLayoutManager"
-            tools:context="org.ipforsmartobjects.apps.baking.steps.RecipeStepsListActivity"
-            tools:listitem="@layout/recipe_step_list_item" />
-    </LinearLayout>
+            <LinearLayout
+                android:id="@+id/list_container"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical">
+
+                <android.support.v7.widget.RecyclerView
+                    android:id="@+id/ingredient_list"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="16dp"
+                    android:layout_marginRight="16dp"
+                    app:layoutManager="LinearLayoutManager"
+                    tools:context="org.ipforsmartobjects.apps.baking.steps.RecipeStepsListActivity"
+                    tools:listitem="@layout/recipe_ingredient_list_item" />
+
+                <android.support.v7.widget.RecyclerView
+                    android:id="@+id/steps_list"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="16dp"
+                    android:layout_marginRight="16dp"
+                    app:layoutManager="LinearLayoutManager"
+                    tools:context="org.ipforsmartobjects.apps.baking.steps.RecipeStepsListActivity"
+                    tools:listitem="@layout/recipe_step_list_item" />
+            </LinearLayout>
+
+            <ProgressBar
+                android:id="@+id/progress"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:visibility="gone" />
+
+            <TextView
+                android:id="@+id/empty_view"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:text="@string/no_recipes"
+                android:textAppearance="@style/TextAppearance.AppCompat.Display1"
+                android:visibility="gone" />
+
+            <TextView
+                android:id="@+id/error_view"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:text="@string/loading_failed"
+                android:textAppearance="@style/TextAppearance.AppCompat.Display1"
+                android:visibility="gone" />
+
+        </RelativeLayout>
+    </android.support.v4.widget.SwipeRefreshLayout>
 </layout>

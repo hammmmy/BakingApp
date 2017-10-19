@@ -60,8 +60,29 @@ public class CachedRecipesRepository implements RepositoryContract.RecipesReposi
         });
     }
 
+    private void getRecipe(final long recipeId, @NonNull final LoadRecipeCallback callback) {
+        mRecipesServiceApi.getRecipes(new RecipesServiceApi.MoviesServiceCallback<List<Recipe>>() {
+            @Override
+            public void onLoaded(List<Recipe> recipes) {
+                mCachedRecipes = ImmutableList.copyOf(recipes);
+
+                for (Recipe popular : mCachedRecipes) {
+                    mRecipeCache.put(popular.getId(), popular);
+                }
+                callback.onRecipeLoaded(mRecipeCache.get(recipeId));
+
+            }
+
+            @Override
+            public void onLoadingFailed() {
+                callback.onLoadingFailed();
+            }
+        });
+    }
+
+
     @Override
-    public void getRecipe(final long recipeId, @NonNull final GetRecipeCallback callback) {
+    public void loadRecipe(final long recipeId, @NonNull final LoadRecipeCallback callback) {
         checkNotNull(recipeId);
         checkNotNull(callback);
 
@@ -69,7 +90,7 @@ public class CachedRecipesRepository implements RepositoryContract.RecipesReposi
             // show immediately available data first
             callback.onRecipeLoaded(mRecipeCache.get(recipeId));
         } else {
-            callback.onLoadingFailed();
+            getRecipe(recipeId, callback);
         }
     }
 

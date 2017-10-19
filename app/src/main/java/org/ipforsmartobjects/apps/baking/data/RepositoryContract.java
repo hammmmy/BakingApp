@@ -8,7 +8,7 @@ public interface RepositoryContract {
     interface RecipesRepository {
         void loadRecipes(@NonNull LoadRecipesCallback callback);
 
-        void getRecipe(long recipeId, @NonNull GetRecipeCallback callback); // get recipe stored in cache
+        void loadRecipe(long recipeId, @NonNull LoadRecipeCallback callback); // get recipe stored in cache
 
         void clearCache();
 
@@ -18,7 +18,7 @@ public interface RepositoryContract {
             void onLoadingFailed();
         }
 
-        interface GetRecipeCallback {
+        interface LoadRecipeCallback {
             void onRecipeLoaded(Recipe recipe);
 
             void onLoadingFailed();

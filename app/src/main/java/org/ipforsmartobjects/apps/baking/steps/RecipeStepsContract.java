@@ -2,6 +2,7 @@ package org.ipforsmartobjects.apps.baking.steps;
 
 import android.support.annotation.NonNull;
 
+import org.ipforsmartobjects.apps.baking.data.Ingredient;
 import org.ipforsmartobjects.apps.baking.data.Step;
 
 import java.util.List;
@@ -15,19 +16,19 @@ public interface RecipeStepsContract {
     interface View {
         void setProgressIndicator(boolean active);
 
-        void showRecipeSteps(List<Step> steps);
+        void showData(List<Step> steps, List<Ingredient> ingredients);
 
         void showErrorView();
 
         void showEmptyView();
 
-        void showStepDetailUi(long stepId);
+        void showStepDetailUi(long recipeId, long stepId);
     }
 
     interface Presenter {
         void loadSteps(boolean forceUpdate);
 
-        void openStepDetails(@NonNull Step requestedStep);
+        void openStepDetails(int recipeId, @NonNull Step requestedStep);
 
     }
 

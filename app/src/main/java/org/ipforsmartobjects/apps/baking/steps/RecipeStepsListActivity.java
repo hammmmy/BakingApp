@@ -14,12 +14,15 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 
+import org.ipforsmartobjects.apps.baking.Injection;
 import org.ipforsmartobjects.apps.baking.R;
+import org.ipforsmartobjects.apps.baking.data.Ingredient;
+import org.ipforsmartobjects.apps.baking.data.Step;
 import org.ipforsmartobjects.apps.baking.databinding.ActivityRecipeStepListBinding;
 import org.ipforsmartobjects.apps.baking.stepdetail.RecipeStepDetailActivity;
 import org.ipforsmartobjects.apps.baking.stepdetail.RecipeStepDetailFragment;
-import org.ipforsmartobjects.apps.baking.data.dummy.DummyContent;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -30,7 +33,7 @@ import java.util.List;
  * item details. On tablets, the activity presents the list of items and
  * item details side-by-side using two vertical panes.
  */
-public class RecipeStepsListActivity extends AppCompatActivity {
+public class RecipeStepsListActivity extends AppCompatActivity implements RecipeStepsContract.View {
 
     public static final String ARG_ITEM_ID = "recipe_item_id";
     /**
@@ -39,6 +42,22 @@ public class RecipeStepsListActivity extends AppCompatActivity {
      */
     private boolean mTwoPane;
     ActivityRecipeStepListBinding mBinding;
+    private int mRecipeId;
+    private TextView mEmptyView;
+    private TextView mErrorView;
+    private View mListViewContainer;
+    private View mDetailContainer;
+    private RecyclerView mIngredientsList;
+    private RecyclerView mStepsList;
+    private IngredientsAdapter mIngredientsAdapter;
+    private RecipeStepsAdapter mStepsAdapter;
+    private RecipeStepsItemListener mItemsListener = new RecipeStepsItemListener() {
+        @Override
+        public void onRecipeStepClick(int recipeId, Step clickedStep) {
+            mActionsListener.openStepDetails(recipeId, clickedStep);
+        }
+    };
+    private RecipeStepsPresenter mActionsListener;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,82 +71,94 @@ public class RecipeStepsListActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
         toolbar.setTitle(getTitle());
 
-        View recyclerView = findViewById(R.id.recipe_list);
+        if (savedInstanceState == null) {
+            mRecipeId = (int) getIntent().getLongExtra(ARG_ITEM_ID, -1);
+        }
+
+        mEmptyView = mBinding.stepsContainer.emptyView;
+        mErrorView = mBinding.stepsContainer.errorView;
+        mListViewContainer = mBinding.stepsContainer.listContainer;
+        mIngredientsList = mBinding.stepsContainer.ingredientList;
+        mStepsList = mBinding.stepsContainer.stepsList;
+
+        if (mTwoPane) {
+            mDetailContainer = mBinding.stepsContainer.recipeDetailContainer;
+        }
+
+        mActionsListener = new RecipeStepsPresenter(RecipeStepsListActivity.this,
+                Injection.provideRecipesRepository(), mRecipeId);
+
+
+        View recyclerView = findViewById(R.id.steps_list);
         assert recyclerView != null;
         setupRecyclerView((RecyclerView) recyclerView);
 
     }
 
     private void setupRecyclerView(@NonNull RecyclerView recyclerView) {
-        recyclerView.setAdapter(new SimpleItemRecyclerViewAdapter(DummyContent.ITEMS));
+        mIngredientsAdapter = new IngredientsAdapter(new ArrayList<Ingredient>());
+        mIngredientsList.setAdapter(mIngredientsAdapter);
+
+        mStepsAdapter = new RecipeStepsAdapter(mRecipeId,
+                new ArrayList<Step>(), mItemsListener);
+        mStepsList.setAdapter(mStepsAdapter);
     }
 
-    public class SimpleItemRecyclerViewAdapter
-            extends RecyclerView.Adapter<SimpleItemRecyclerViewAdapter.ViewHolder> {
+    @Override
+    public void setProgressIndicator(boolean active) {
+        mBinding.stepsContainer.progress.setVisibility(active ? View.VISIBLE : View.GONE);
 
-        private final List<DummyContent.DummyItem> mValues;
-
-        public SimpleItemRecyclerViewAdapter(List<DummyContent.DummyItem> items) {
-            mValues = items;
-        }
-
-        @Override
-        public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-            View view = LayoutInflater.from(parent.getContext())
-                    .inflate(R.layout.recipe_step_list_item, parent, false);
-            return new ViewHolder(view);
-        }
-
-        @Override
-        public void onBindViewHolder(final ViewHolder holder, int position) {
-            holder.mItem = mValues.get(position);
-            holder.mIdView.setText(mValues.get(position).id);
-            holder.mContentView.setText(mValues.get(position).content);
-
-            holder.mView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    if (mTwoPane) {
-                        Bundle arguments = new Bundle();
-                        arguments.putString(RecipeStepDetailFragment.ARG_ITEM_ID, holder.mItem.id);
-                        RecipeStepDetailFragment fragment = new RecipeStepDetailFragment();
-                        fragment.setArguments(arguments);
-                        getSupportFragmentManager().beginTransaction()
-                                .replace(R.id.recipe_detail_container, fragment)
-                                .commit();
-                    } else {
-                        Context context = v.getContext();
-                        Intent intent = new Intent(context, RecipeStepDetailActivity.class);
-                        intent.putExtra(RecipeStepDetailFragment.ARG_ITEM_ID, holder.mItem.id);
-
-                        context.startActivity(intent);
-                    }
-                }
-            });
-        }
-
-        @Override
-        public int getItemCount() {
-            return mValues.size();
-        }
-
-        public class ViewHolder extends RecyclerView.ViewHolder {
-            public final View mView;
-            public final TextView mIdView;
-            public final TextView mContentView;
-            public DummyContent.DummyItem mItem;
-
-            public ViewHolder(View view) {
-                super(view);
-                mView = view;
-                mIdView = view.findViewById(R.id.id);
-                mContentView = view.findViewById(R.id.content);
-            }
-
-            @Override
-            public String toString() {
-                return super.toString() + " '" + mContentView.getText() + "'";
-            }
-        }
     }
+
+    @Override
+    public void showData(List<Step> steps, List<Ingredient> ingredients) {
+        mListViewContainer.setVisibility(View.VISIBLE);
+        mErrorView.setVisibility(View.GONE);
+        mEmptyView.setVisibility(View.GONE);
+        if (mTwoPane) mDetailContainer.setVisibility(View.VISIBLE);
+        mStepsAdapter.replaceData(mRecipeId, steps);
+        mIngredientsAdapter.replaceData(ingredients);
+    }
+
+    @Override
+    public void showEmptyView() {
+        mListViewContainer.setVisibility(View.GONE);
+        mEmptyView.setVisibility(View.VISIBLE);
+        mErrorView.setVisibility(View.GONE);
+
+    }
+
+    @Override
+    public void showErrorView() {
+        mListViewContainer.setVisibility(View.GONE);
+        mEmptyView.setVisibility(View.GONE);
+        mErrorView.setVisibility(View.VISIBLE);
+    }
+
+    @Override
+    public void showStepDetailUi(long recipeId, long stepId) {
+        if (mTwoPane) {
+            Bundle arguments = new Bundle();
+            arguments.putLong(RecipeStepDetailFragment.ARG_RECIPE_ID, recipeId);
+            arguments.putLong(RecipeStepDetailFragment.ARG_STEP_ID, stepId);
+            RecipeStepDetailFragment fragment = new RecipeStepDetailFragment();
+            fragment.setArguments(arguments);
+            getSupportFragmentManager().beginTransaction()
+                    .replace(R.id.recipe_detail_container, fragment)
+                    .commit();
+        } else {
+
+            Intent intent = new Intent(RecipeStepsListActivity.this, RecipeStepDetailActivity.class);
+            intent.putExtra(RecipeStepDetailFragment.ARG_RECIPE_ID, recipeId);
+            intent.putExtra(RecipeStepDetailFragment.ARG_STEP_ID, stepId);
+
+            startActivity(intent);
+        }
+
+    }
+
+    interface RecipeStepsItemListener {
+        void onRecipeStepClick(int recipeId, Step clickedStep);
+    }
+
 }

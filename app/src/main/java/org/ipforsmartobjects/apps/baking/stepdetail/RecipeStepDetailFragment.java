@@ -24,7 +24,13 @@ public class RecipeStepDetailFragment extends Fragment {
      * The fragment argument representing the item ID that this fragment
      * represents.
      */
-    public static final String ARG_ITEM_ID = "item_id";
+    public static final String ARG_STEP_ID = "step_id";
+
+    /**
+     * The fragment argument representing the item ID that this fragment
+     * represents.
+     */
+    public static final String ARG_RECIPE_ID = "recipe_id";
 
     /**
      * The dummy content this fragment is presenting.
@@ -42,11 +48,13 @@ public class RecipeStepDetailFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        if (getArguments().containsKey(ARG_ITEM_ID)) {
+        if (getArguments().containsKey(ARG_STEP_ID)) {
+            // TODO: 9/24/2017 add logic to parse and show the detail
+
             // Load the dummy content specified by the fragment
             // arguments. In a real-world scenario, use a Loader
             // to load content from a content provider.
-            mItem = DummyContent.ITEM_MAP.get(getArguments().getString(ARG_ITEM_ID));
+            mItem = DummyContent.ITEM_MAP.get(getArguments().getString(ARG_STEP_ID));
 
             Activity activity = this.getActivity();
             CollapsingToolbarLayout appBarLayout = activity.findViewById(R.id.toolbar_layout);
