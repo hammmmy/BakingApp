@@ -1,6 +1,5 @@
 package org.ipforsmartobjects.apps.baking.steps;
 
-import android.content.Context;
 import android.content.Intent;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
@@ -8,9 +7,7 @@ import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.TextView;
 
 
@@ -19,7 +16,7 @@ import org.ipforsmartobjects.apps.baking.R;
 import org.ipforsmartobjects.apps.baking.data.Ingredient;
 import org.ipforsmartobjects.apps.baking.data.Step;
 import org.ipforsmartobjects.apps.baking.databinding.ActivityRecipeStepListBinding;
-import org.ipforsmartobjects.apps.baking.stepdetail.RecipeStepDetailActivity;
+import org.ipforsmartobjects.apps.baking.steppages.RecipeStepScreenSlideActivity;
 import org.ipforsmartobjects.apps.baking.stepdetail.RecipeStepDetailFragment;
 
 import java.util.ArrayList;
@@ -29,7 +26,7 @@ import java.util.List;
  * An activity representing a list of Recipes. This activity
  * has different presentations for handset and tablet-size devices. On
  * handsets, the activity presents a list of items, which when touched,
- * lead to a {@link RecipeStepDetailActivity} representing
+ * lead to a {@link RecipeStepScreenSlideActivity} representing
  * item details. On tablets, the activity presents the list of items and
  * item details side-by-side using two vertical panes.
  */
@@ -43,6 +40,7 @@ public class RecipeStepsListActivity extends AppCompatActivity implements Recipe
     private boolean mTwoPane;
     ActivityRecipeStepListBinding mBinding;
     private int mRecipeId;
+    private int mTotalSteps;
     private TextView mEmptyView;
     private TextView mErrorView;
     private View mListViewContainer;
@@ -118,6 +116,7 @@ public class RecipeStepsListActivity extends AppCompatActivity implements Recipe
         if (mTwoPane) mDetailContainer.setVisibility(View.VISIBLE);
         mStepsAdapter.replaceData(mRecipeId, steps);
         mIngredientsAdapter.replaceData(ingredients);
+        mTotalSteps = steps.size();
     }
 
     @Override
@@ -148,9 +147,10 @@ public class RecipeStepsListActivity extends AppCompatActivity implements Recipe
                     .commit();
         } else {
 
-            Intent intent = new Intent(RecipeStepsListActivity.this, RecipeStepDetailActivity.class);
+            Intent intent = new Intent(RecipeStepsListActivity.this, RecipeStepScreenSlideActivity.class);
             intent.putExtra(RecipeStepDetailFragment.ARG_RECIPE_ID, recipeId);
             intent.putExtra(RecipeStepDetailFragment.ARG_STEP_ID, stepId);
+            intent.putExtra(RecipeStepDetailFragment.ARG_TOTAL_STEPS, mTotalSteps);
 
             startActivity(intent);
         }

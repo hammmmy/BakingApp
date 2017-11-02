@@ -15,9 +15,12 @@ public interface RecipeStepDetailContract {
         void showEmptyView();
 
         void showRecipeStepsDetail(Step step);
+
+        void openVideo(String videoURL);
     }
 
     interface Presenter {
-        void openStep(long stepId);
+        void openStep(int recipeId, int stepId);
+        void onVideoClicked();
     }
 }

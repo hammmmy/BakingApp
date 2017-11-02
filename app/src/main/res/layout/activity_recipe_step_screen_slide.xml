@@ -6,7 +6,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:fitsSystemWindows="true"
-        tools:context="org.ipforsmartobjects.apps.baking.stepdetail.RecipeStepDetailActivity"
+        tools:context="org.ipforsmartobjects.apps.baking.steppages.RecipeStepScreenSlideActivity"
         tools:ignore="MergeRootFrame">
 
         <android.support.design.widget.AppBarLayout
@@ -36,21 +36,52 @@
 
         </android.support.design.widget.AppBarLayout>
 
+
+
         <android.support.v4.widget.NestedScrollView
             android:id="@+id/recipe_detail_container"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            app:layout_behavior="@string/appbar_scrolling_view_behavior" />
+            app:layout_behavior="@string/appbar_scrolling_view_behavior"
+            >
 
-        <android.support.design.widget.FloatingActionButton
-            android:id="@+id/fab"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_vertical|start"
-            android:layout_margin="@dimen/fab_margin"
-            app:layout_anchor="@+id/recipe_detail_container"
-            app:layout_anchorGravity="top|end"
-            app:srcCompat="@android:drawable/stat_notify_chat" />
+            <android.support.v4.view.ViewPager
+                android:id="@+id/pager"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
+
+
+        </android.support.v4.widget.NestedScrollView>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="bottom"
+            >
+            <android.support.v7.widget.ButtonBarLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+                    <android.support.v7.widget.AppCompatButton
+                        android:id="@+id/previous_button"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentLeft="true"
+                        android:text="Previous Step"/>
+                    <android.support.v7.widget.AppCompatButton
+                        android:id="@+id/next_button"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentRight="true"
+                        android:text="Next Step"/>
+
+                </RelativeLayout>
+
+            </android.support.v7.widget.ButtonBarLayout>
+        </RelativeLayout>
 
     </android.support.design.widget.CoordinatorLayout>
 </layout>

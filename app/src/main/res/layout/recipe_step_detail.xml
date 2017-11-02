@@ -2,12 +2,48 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
-    <TextView
-        android:id="@+id/recipe_detail"
-        style="?android:attr/textAppearanceLarge"
+    <RelativeLayout
+        android:id="@+id/recipe_detail_view_container"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:padding="16dp"
-        android:textIsSelectable="true"
-        tools:context="org.ipforsmartobjects.apps.baking.stepdetail.RecipeStepDetailFragment" />
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:id="@+id/recipe_detail_container"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <ImageView
+                android:id="@+id/step_video_thumbnail"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/video_thumbnail_height"
+                android:scaleType="centerCrop" />
+
+            <TextView
+                android:id="@+id/step_description"
+                style="?android:attr/textAppearanceLarge"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:padding="16dp"
+                android:textIsSelectable="true"
+                tools:context="org.ipforsmartobjects.apps.baking.stepdetail.RecipeStepDetailFragment" />
+
+        </LinearLayout>
+
+        <ProgressBar
+            android:id="@+id/progress"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:visibility="gone" />
+
+        <TextView
+            android:id="@+id/empty_view"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_centerInParent="true"
+            android:text="@string/loading_failed"
+            android:textAppearance="@style/Base.TextAppearance.AppCompat.Large"
+            android:visibility="gone" />
+    </RelativeLayout>
 </layout>
