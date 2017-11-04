@@ -44,7 +44,7 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.ViewHolder
 
         if (!TextUtils.isEmpty(recipe.getImage())) {
             Picasso.with(mContext).load(recipe.getImage())
-                    .error(R.drawable.ic_recipe)
+                    .error(R.drawable.ic_recipe_icon)
                     .into(viewHolder.mRecipeViewBinding.recipeIcon);
         }
 
