@@ -3,7 +3,6 @@ package org.ipforsmartobjects.apps.baking.steps;
 import android.content.Intent;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
@@ -58,6 +57,7 @@ public class RecipeStepsListActivity extends AppCompatActivity implements Recipe
     };
     private RecipeStepsPresenter mActionsListener;
     private SwipeRefreshLayout mSwipeRefreshLayout;
+    private String mRecipeName;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -69,7 +69,7 @@ public class RecipeStepsListActivity extends AppCompatActivity implements Recipe
 
         Toolbar toolbar = mBinding.toolbar;
         setSupportActionBar(toolbar);
-        toolbar.setTitle(getTitle());
+//        toolbar.setTitle(getTitle());
 
         if (savedInstanceState == null) {
             mRecipeId = (int) getIntent().getLongExtra(ARG_ITEM_ID, -1);
@@ -89,11 +89,7 @@ public class RecipeStepsListActivity extends AppCompatActivity implements Recipe
                 Injection.provideRecipesRepository(), mRecipeId);
 
 
-        View recyclerView = findViewById(R.id.steps_list);
-        assert recyclerView != null;
-        setupRecyclerView((RecyclerView) recyclerView);
-        mActionsListener.loadSteps(false);
-
+        setupRecyclerViews();
         mSwipeRefreshLayout = mBinding.stepsContainer.swipeRefreshLayout;
         mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
@@ -104,7 +100,13 @@ public class RecipeStepsListActivity extends AppCompatActivity implements Recipe
         });
     }
 
-    private void setupRecyclerView(@NonNull RecyclerView recyclerView) {
+    @Override
+    protected void onResume() {
+        mActionsListener.loadSteps(false);
+        super.onResume();
+    }
+
+    private void setupRecyclerViews() {
         mIngredientsAdapter = new IngredientsAdapter(new ArrayList<Ingredient>());
         mIngredientsList.setAdapter(mIngredientsAdapter);
 
@@ -120,7 +122,9 @@ public class RecipeStepsListActivity extends AppCompatActivity implements Recipe
     }
 
     @Override
-    public void showData(List<Step> steps, List<Ingredient> ingredients) {
+    public void showData(String recipeName, List<Step> steps, List<Ingredient> ingredients) {
+        mRecipeName = recipeName;
+        mBinding.toolbar.setTitle(mRecipeName);
         mListViewContainer.setVisibility(View.VISIBLE);
         mErrorView.setVisibility(View.GONE);
         mEmptyView.setVisibility(View.GONE);

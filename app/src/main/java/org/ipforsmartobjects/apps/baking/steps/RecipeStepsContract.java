@@ -16,7 +16,7 @@ public interface RecipeStepsContract {
     interface View {
         void setProgressIndicator(boolean active);
 
-        void showData(List<Step> steps, List<Ingredient> ingredients);
+        void showData(String recipeName, List<Step> steps, List<Ingredient> ingredients);
 
         void showErrorView();
 

@@ -5,7 +5,8 @@
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:background="@color/colorPrimary">
 
         <TextView
             android:id="@+id/ingredient"
@@ -15,10 +16,13 @@
             android:layout_marginLeft="@dimen/text_margin"
             android:layout_marginStart="@dimen/text_margin"
             android:textAppearance="@style/TextAppearance.AppCompat.Small"
-            tools:text="Graham Cracker crumbs"
+            android:maxLines="2"
+            tools:text="Graham Cracker crumbs "
+            android:layout_toLeftOf="@+id/ingredient_details"
             tools:textColor="@android:color/black" />
 
         <LinearLayout
+            android:id="@+id/ingredient_details"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="end"
@@ -26,21 +30,23 @@
 
             <TextView
                 android:id="@+id/ingredient_quantity"
-                android:layout_width="wrap_content"
+                android:layout_width="@dimen/ingredient_detail_width"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="@dimen/text_margin"
                 android:layout_marginStart="@dimen/text_margin"
-                android:inputType="numberDecimal"
                 android:textAppearance="@style/TextAppearance.AppCompat.Caption"
+                android:gravity="end"
                 tools:text="2"
                 tools:textColor="@android:color/black" />
 
             <TextView
                 android:id="@+id/ingredient_measure"
-                android:layout_width="wrap_content"
+                android:layout_width="@dimen/ingredient_detail_width"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="@dimen/text_margin"
                 android:layout_marginStart="@dimen/text_margin"
+                android:layout_marginRight="@dimen/text_margin"
+                android:layout_marginEnd="@dimen/text_margin"
                 android:textAppearance="@style/TextAppearance.AppCompat.Caption"
                 tools:text="CUPS"
                 tools:textColor="@android:color/black" />

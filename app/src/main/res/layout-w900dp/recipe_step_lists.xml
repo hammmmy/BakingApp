@@ -55,7 +55,7 @@
                         android:layout_marginRight="16dp"
                         app:layoutManager="LinearLayoutManager"
                         tools:context="org.ipforsmartobjects.apps.baking.steps.RecipeStepsListActivity"
-                        tools:listitem="@layout/recipe_step_list_item" />
+                        tools:listitem="@layout/recipe_step_item" />
                 </LinearLayout>
 
                 <ProgressBar
