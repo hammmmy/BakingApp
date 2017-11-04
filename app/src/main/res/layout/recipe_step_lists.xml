@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <android.support.v4.widget.SwipeRefreshLayout
-        android:id="@+id/refresh_layout"
+        android:id="@+id/swipe_refresh_layout"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
@@ -17,6 +17,14 @@
                 android:layout_height="match_parent"
                 android:orientation="vertical">
 
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Large"
+                    android:text="@string/ingredients"
+                    tools:textColor="@android:color/black"
+                    android:layout_marginLeft="@dimen/text_margin"/>
+
                 <android.support.v7.widget.RecyclerView
                     android:id="@+id/ingredient_list"
                     android:layout_width="match_parent"
@@ -26,6 +34,14 @@
                     app:layoutManager="LinearLayoutManager"
                     tools:context="org.ipforsmartobjects.apps.baking.steps.RecipeStepsListActivity"
                     tools:listitem="@layout/recipe_ingredient_list_item" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Large"
+                    android:text="@string/steps"
+                    tools:textColor="@android:color/black"
+                    android:layout_marginLeft="@dimen/text_margin"/>
 
                 <android.support.v7.widget.RecyclerView
                     android:id="@+id/steps_list"

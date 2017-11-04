@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.ActivityOptionsCompat;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
@@ -35,6 +36,7 @@ public class RecipeCardGridActivity extends AppCompatActivity implements Recipes
             mActionsListener.openRecipeSteps(clickedRecipe);
         }
     };
+    private SwipeRefreshLayout mSwipeRefreshLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,6 +55,14 @@ public class RecipeCardGridActivity extends AppCompatActivity implements Recipes
         mListView = mBinding.recipeGridLayoutContainer.recipeGrid;
         mEmptyView = mBinding.recipeGridLayoutContainer.emptyView;
         mErrorView = mBinding.recipeGridLayoutContainer.errorView;
+        mSwipeRefreshLayout = mBinding.recipeGridLayoutContainer.refreshLayout;
+        mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                mActionsListener.loadRecipes(true);
+                mSwipeRefreshLayout.setRefreshing(false);
+            }
+        });
     }
 
     @Override

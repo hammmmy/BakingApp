@@ -6,7 +6,7 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="5dp">
+        android:padding="@dimen/recipe_card_padding">
 
         <android.support.v7.widget.CardView
             android:id="@+id/recipe_container"
@@ -14,7 +14,7 @@
             android:layout_height="wrap_content"
             android:elevation="@dimen/cardview_default_elevation"
             app:cardBackgroundColor="@color/colorPrimary"
-            app:cardCornerRadius="4dp">
+            app:cardCornerRadius="@dimen/recipe_card_radius">
 
 
             <RelativeLayout
@@ -23,15 +23,15 @@
 
                 <ImageView
                     android:id="@+id/recipe_icon"
-                    android:layout_width="80dp"
-                    android:layout_height="80dp"
+                    android:layout_width="@dimen/recipe_icon_width"
+                    android:layout_height="@dimen/recipe_icon_height"
                     android:src="@drawable/ic_recipe_icon" />
 
                 <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_centerInParent="true"
-                    android:layout_marginHorizontal="20dp"
+                    android:layout_marginHorizontal="@dimen/text_margin"
                     android:layout_toEndOf="@+id/recipe_icon"
                     android:layout_toRightOf="@+id/recipe_icon"
                     android:orientation="vertical">

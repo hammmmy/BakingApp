@@ -5,5 +5,7 @@
     <string name="title_activity_recipe_card_grid">Baking App</string>
     <string name="loading_failed">Loading Failed</string>
     <string name="no_recipes">No Recipes</string>
-    <string name="servings">Servings :</string>
+    <string name="servings">Servings : </string>
+    <string name="ingredients">Ingredients</string>
+    <string name="steps">Steps</string>
 </resources>

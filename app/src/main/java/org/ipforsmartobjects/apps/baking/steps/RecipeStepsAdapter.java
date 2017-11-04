@@ -38,7 +38,7 @@ public class RecipeStepsAdapter extends RecyclerView.Adapter<RecipeStepsAdapter.
     public void onBindViewHolder(ViewHolder viewHolder, int position) {
         Step step = mSteps.get(position);
 
-        viewHolder.mRecipeViewBinding.stepId.setText(step.getId());
+        viewHolder.mRecipeViewBinding.stepId.setText("" + step.getId());
         viewHolder.mRecipeViewBinding.shortDescription.setText(step.getDescription());
     }
 

@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
@@ -56,6 +57,7 @@ public class RecipeStepsListActivity extends AppCompatActivity implements Recipe
         }
     };
     private RecipeStepsPresenter mActionsListener;
+    private SwipeRefreshLayout mSwipeRefreshLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -90,7 +92,16 @@ public class RecipeStepsListActivity extends AppCompatActivity implements Recipe
         View recyclerView = findViewById(R.id.steps_list);
         assert recyclerView != null;
         setupRecyclerView((RecyclerView) recyclerView);
+        mActionsListener.loadSteps(false);
 
+        mSwipeRefreshLayout = mBinding.stepsContainer.swipeRefreshLayout;
+        mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                mActionsListener.loadSteps(true);
+                mSwipeRefreshLayout.setRefreshing(false);
+            }
+        });
     }
 
     private void setupRecyclerView(@NonNull RecyclerView recyclerView) {
