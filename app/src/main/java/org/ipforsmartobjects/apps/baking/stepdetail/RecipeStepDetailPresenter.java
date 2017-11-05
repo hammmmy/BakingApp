@@ -58,10 +58,5 @@ public class RecipeStepDetailPresenter implements RecipeStepDetailContract.Prese
 
     }
 
-    @Override
-    public void onVideoClicked() {
-
-    }
-
 
 }

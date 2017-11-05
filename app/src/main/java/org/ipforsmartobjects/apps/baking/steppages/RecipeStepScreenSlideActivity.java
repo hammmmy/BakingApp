@@ -1,6 +1,7 @@
 package org.ipforsmartobjects.apps.baking.steppages;
 
 import android.content.Context;
+import android.content.res.Configuration;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -20,6 +21,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.app.ActionBar;
 import android.support.v4.app.NavUtils;
 import android.view.MenuItem;
+import android.view.Window;
+import android.view.WindowManager;
 
 import org.ipforsmartobjects.apps.baking.Injection;
 import org.ipforsmartobjects.apps.baking.R;
@@ -42,7 +45,7 @@ public class RecipeStepScreenSlideActivity extends AppCompatActivity implements 
     private ViewPager mPager;
     private ActivityRecipeStepScreenSlideBinding mBinding;
     private PagerAdapter mPagerAdapter;
-    private long mRecipeId;
+    private int mRecipeId;
     private long mStepId;
     private RecipeStepsScreenSlidePresenter mActionsListener;
     private int mTotalSteps;
@@ -63,18 +66,21 @@ public class RecipeStepScreenSlideActivity extends AppCompatActivity implements 
 
         Intent intent = getIntent();
         if (intent != null) {
-            mRecipeId = intent.getLongExtra(RecipeStepDetailFragment.ARG_RECIPE_ID, -1);
+            mRecipeId = (int) intent.getLongExtra(RecipeStepDetailFragment.ARG_RECIPE_ID, -1);
             mStepId = intent.getLongExtra(RecipeStepDetailFragment.ARG_STEP_ID, -1);
             mTotalSteps = intent.getIntExtra(RecipeStepDetailFragment.ARG_TOTAL_STEPS, -1);
         }
+
+        mPreviousButton = mBinding.previousButton;
+        mNextButton = mBinding.nextButton;
+
         mPager = mBinding.pager;
-        mPagerAdapter = new ScreenSlidePagerAdapter(getSupportFragmentManager());
+        mPagerAdapter = new RecipeStepScreenSlidePagerAdapter(getSupportFragmentManager(),
+                mRecipeId, mTotalSteps);
         mPager.setAdapter(mPagerAdapter);
 
         mPager.setCurrentItem((int) mStepId);
 
-        mPreviousButton = mBinding.previousButton;
-        mNextButton = mBinding.nextButton;
         mPreviousButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -103,11 +109,25 @@ public class RecipeStepScreenSlideActivity extends AppCompatActivity implements 
 
     }
 
+    public void setLayoutVisibility(boolean visible) {
+        ActionBar actionBar = getSupportActionBar();
+        if(null != actionBar && !visible) {
+            actionBar.hide();
+        }
+        mPreviousButton.setVisibility(visible ? View.VISIBLE : View.GONE);
+        mNextButton.setVisibility(visible ? View.VISIBLE : View.GONE);
+    }
     private void setButtonVisibility() {
-        mNextButton.setVisibility((mPager.getCurrentItem() == mPagerAdapter.getCount() - 1) ?
-                View.GONE : View.VISIBLE);
-        mPreviousButton.setVisibility((mPager.getCurrentItem() == 0) ?
-                View.GONE : View.VISIBLE);
+        int orientation = getResources().getConfiguration().orientation;
+        if (orientation == Configuration.ORIENTATION_LANDSCAPE) {
+            setLayoutVisibility(false);
+        } else {
+            setLayoutVisibility(true);
+            mNextButton.setVisibility((mPager.getCurrentItem() == mPagerAdapter.getCount() - 1) ?
+                    View.GONE : View.VISIBLE);
+            mPreviousButton.setVisibility((mPager.getCurrentItem() == 0) ?
+                    View.GONE : View.VISIBLE);
+        }
     }
 
     @Override
@@ -135,27 +155,6 @@ public class RecipeStepScreenSlideActivity extends AppCompatActivity implements 
     @Override
     public void showNext() {
         mPager.setCurrentItem(mPager.getCurrentItem() + 1);
-    }
-
-    private class ScreenSlidePagerAdapter extends FragmentStatePagerAdapter {
-        public ScreenSlidePagerAdapter(FragmentManager fm) {
-            super(fm);
-        }
-
-        @Override
-        public Fragment getItem(int position) {
-            Bundle arguments = new Bundle();
-            arguments.putLong(RecipeStepDetailFragment.ARG_RECIPE_ID, mRecipeId);
-            arguments.putLong(RecipeStepDetailFragment.ARG_STEP_ID, position);
-            RecipeStepDetailFragment fragment = new RecipeStepDetailFragment();
-            fragment.setArguments(arguments);
-            return fragment;
-        }
-
-        @Override
-        public int getCount() {
-            return mTotalSteps;
-        }
     }
 
 }
