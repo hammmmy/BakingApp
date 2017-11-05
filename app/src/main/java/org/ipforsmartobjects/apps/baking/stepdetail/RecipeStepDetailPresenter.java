@@ -43,7 +43,7 @@ public class RecipeStepDetailPresenter implements RecipeStepDetailContract.Prese
                     mRecipeStepDetailView.showEmptyView();
                 } else {
                     mStep = recipe.getSteps().get(stepId);
-                    mRecipeStepDetailView.showRecipeStepsDetail(mStep);
+                    mRecipeStepDetailView.showStep(mStep);
                 }
 
             }

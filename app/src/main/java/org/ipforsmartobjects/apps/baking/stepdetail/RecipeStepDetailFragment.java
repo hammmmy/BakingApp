@@ -4,11 +4,16 @@ import android.app.Activity;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v7.app.AppCompatActivity;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.squareup.picasso.Picasso;
+
+import org.ipforsmartobjects.apps.baking.Injection;
 import org.ipforsmartobjects.apps.baking.R;
 import org.ipforsmartobjects.apps.baking.data.Step;
 import org.ipforsmartobjects.apps.baking.databinding.RecipeStepDetailBinding;
@@ -29,6 +34,7 @@ public class RecipeStepDetailFragment extends Fragment implements RecipeStepDeta
 
     public static final String ARG_TOTAL_STEPS = "total_steps";
 
+    public static final String ARG_RECIPE_NAME = "recipe_name";
 
     private int mRecipeId;
     private int mStepId;
@@ -36,6 +42,8 @@ public class RecipeStepDetailFragment extends Fragment implements RecipeStepDeta
     private View mProgressBar;
     private View mDetailView;
     private View mEmptyView;
+    private RecipeStepDetailPresenter mActionsListener;
+    private CollapsingToolbarLayout mAppBarLayout;
 
     /**
      * Mandatory empty constructor for the fragment manager to instantiate the
@@ -49,10 +57,12 @@ public class RecipeStepDetailFragment extends Fragment implements RecipeStepDeta
         super.onCreate(savedInstanceState);
 
         if (getArguments().containsKey(ARG_STEP_ID)) {
-            // TODO: 9/24/2017 add logic to parse and show the detail
             mRecipeId = (int) getArguments().getLong(ARG_RECIPE_ID);
             mStepId = (int) getArguments().getLong(ARG_STEP_ID);
         }
+
+        mActionsListener = new RecipeStepDetailPresenter(this,
+                Injection.provideRecipesRepository());
     }
 
 
@@ -62,9 +72,15 @@ public class RecipeStepDetailFragment extends Fragment implements RecipeStepDeta
         mBinding = RecipeStepDetailBinding.inflate(inflater, container, false);
 
 
-        mProgressBar = mBinding.progress;
-        mDetailView = mBinding.recipeDetailContainer;
-        mEmptyView = mBinding.emptyView;
+        mProgressBar = mBinding.stepLayoutContainer.progress;
+        mDetailView = mBinding.stepLayoutContainer.recipeDetailContainer;
+        mEmptyView = mBinding.stepLayoutContainer.emptyView;
+//        mAppBarLayout = mBinding.toolbarLayout;
+
+        ((AppCompatActivity) getActivity()).setSupportActionBar(mBinding.toolbar);
+
+        mActionsListener.openStep(mRecipeId, mStepId);
+
         return mBinding.getRoot();
     }
 
@@ -80,9 +96,25 @@ public class RecipeStepDetailFragment extends Fragment implements RecipeStepDeta
     }
 
     @Override
-    public void showRecipeStepsDetail(Step step) {
+    public void showStep(Step step) {
         mDetailView.setVisibility(View.VISIBLE);
         mEmptyView.setVisibility(View.GONE);
+
+        mBinding.toolbar.setTitle(step.getShortDescription());
+//        if (mAppBarLayout != null) {
+//            mAppBarLayout.setTitle(step.getShortDescription());
+//        }
+//        mBinding.detailToolbar.setTitle(step.getShortDescription());
+
+        mBinding.stepLayoutContainer.stepDescription.setText(step.getDescription());
+
+        if (!TextUtils.isEmpty(step.getThumbnailURL())) {
+            Picasso.with(getActivity()).load(step.getThumbnailURL())
+                    .error(android.R.drawable.ic_menu_report_image)
+                    .into(mBinding.stepLayoutContainer.stepVideoThumbnail);
+
+        }
+
 
     }
 

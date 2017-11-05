@@ -166,6 +166,7 @@ public class RecipeStepsListActivity extends AppCompatActivity implements Recipe
             intent.putExtra(RecipeStepDetailFragment.ARG_RECIPE_ID, recipeId);
             intent.putExtra(RecipeStepDetailFragment.ARG_STEP_ID, stepId);
             intent.putExtra(RecipeStepDetailFragment.ARG_TOTAL_STEPS, mTotalSteps);
+            intent.putExtra(RecipeStepDetailFragment.ARG_RECIPE_NAME, mRecipeName);
 
             startActivity(intent);
         }

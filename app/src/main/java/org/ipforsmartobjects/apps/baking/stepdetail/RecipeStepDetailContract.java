@@ -14,7 +14,7 @@ public interface RecipeStepDetailContract {
 
         void showEmptyView();
 
-        void showRecipeStepsDetail(Step step);
+        void showStep(Step step);
 
         void openVideo(String videoURL);
     }

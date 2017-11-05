@@ -34,7 +34,11 @@ public class RecipeStepsPresenter implements RecipeStepsContract.Presenter {
             @Override
             public void onRecipeLoaded(Recipe recipe) {
                 mRecipeStepsView.setProgressIndicator(false);
-                mRecipeStepsView.showData(recipe.getName(), recipe.getSteps(), recipe.getIngredients());
+                if (recipe == null) {
+                    mRecipeStepsView.showEmptyView();
+                } else {
+                    mRecipeStepsView.showData(recipe.getName(), recipe.getSteps(), recipe.getIngredients());
+                }
             }
 
             @Override

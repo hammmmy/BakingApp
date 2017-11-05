@@ -1,5 +1,7 @@
 package org.ipforsmartobjects.apps.baking.steppages;
 
+import android.content.Context;
+import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.content.Intent;
@@ -7,6 +9,7 @@ import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
@@ -24,6 +27,9 @@ import org.ipforsmartobjects.apps.baking.data.Step;
 import org.ipforsmartobjects.apps.baking.databinding.ActivityRecipeStepScreenSlideBinding;
 import org.ipforsmartobjects.apps.baking.stepdetail.RecipeStepDetailFragment;
 import org.ipforsmartobjects.apps.baking.steps.RecipeStepsListActivity;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * An activity representing a single Recipe detail screen. This
@@ -46,10 +52,8 @@ public class RecipeStepScreenSlideActivity extends AppCompatActivity implements 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mBinding =  DataBindingUtil.setContentView(RecipeStepScreenSlideActivity.this,
+        mBinding = DataBindingUtil.setContentView(RecipeStepScreenSlideActivity.this,
                 R.layout.activity_recipe_step_screen_slide);
-        Toolbar toolbar = mBinding.detailToolbar;
-        setSupportActionBar(toolbar);
 
         // Show the Up button in the action bar.
         ActionBar actionBar = getSupportActionBar();
@@ -61,17 +65,16 @@ public class RecipeStepScreenSlideActivity extends AppCompatActivity implements 
         if (intent != null) {
             mRecipeId = intent.getLongExtra(RecipeStepDetailFragment.ARG_RECIPE_ID, -1);
             mStepId = intent.getLongExtra(RecipeStepDetailFragment.ARG_STEP_ID, -1);
-            mTotalSteps = (int) intent.getLongExtra(RecipeStepDetailFragment.ARG_TOTAL_STEPS, -1);
+            mTotalSteps = intent.getIntExtra(RecipeStepDetailFragment.ARG_TOTAL_STEPS, -1);
         }
         mPager = mBinding.pager;
         mPagerAdapter = new ScreenSlidePagerAdapter(getSupportFragmentManager());
         mPager.setAdapter(mPagerAdapter);
 
-        mActionsListener = new RecipeStepsScreenSlidePresenter(RecipeStepScreenSlideActivity.this,
-                Injection.provideRecipesRepository());
+        mPager.setCurrentItem((int) mStepId);
+
         mPreviousButton = mBinding.previousButton;
         mNextButton = mBinding.nextButton;
-
         mPreviousButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -86,8 +89,26 @@ public class RecipeStepScreenSlideActivity extends AppCompatActivity implements 
             }
         });
 
+        setButtonVisibility();
+        mPager.setOnPageChangeListener(new ViewPager.SimpleOnPageChangeListener() {
+            @Override
+            public void onPageSelected(int position) {
+                setButtonVisibility();
+            }
+        });
+
+        mActionsListener = new RecipeStepsScreenSlidePresenter(RecipeStepScreenSlideActivity.this,
+                Injection.provideRecipesRepository());
+
+
     }
 
+    private void setButtonVisibility() {
+        mNextButton.setVisibility((mPager.getCurrentItem() == mPagerAdapter.getCount() - 1) ?
+                View.GONE : View.VISIBLE);
+        mPreviousButton.setVisibility((mPager.getCurrentItem() == 0) ?
+                View.GONE : View.VISIBLE);
+    }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -136,4 +157,5 @@ public class RecipeStepScreenSlideActivity extends AppCompatActivity implements 
             return mTotalSteps;
         }
     }
+
 }
