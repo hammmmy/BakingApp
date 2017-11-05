@@ -183,7 +183,7 @@ public class RecipeStepDetailFragment extends Fragment implements RecipeStepDeta
     }
 
     private void initMediaSession() {
-        mMediaSession = new MediaSessionCompat(getContext(), "RecipeStepDetailFragment");
+        mMediaSession = new MediaSessionCompat(getActivity(), "RecipeStepDetailFragment");
 
         mMediaSession.setFlags(MediaSessionCompat.FLAG_HANDLES_MEDIA_BUTTONS |
                 MediaSessionCompat.FLAG_HANDLES_TRANSPORT_CONTROLS);
@@ -217,15 +217,15 @@ public class RecipeStepDetailFragment extends Fragment implements RecipeStepDeta
 
     private void initExoPlayer(Uri mediaUri) {
         TrackSelector trackSelector = new DefaultTrackSelector();
-        mExoPlayer = ExoPlayerFactory.newSimpleInstance(getContext(), trackSelector);
+        mExoPlayer = ExoPlayerFactory.newSimpleInstance(getActivity(), trackSelector);
         mExoPlayerView.setPlayer(mExoPlayer);
         mExoPlayer.addListener(this);
 
-        String userAgent = Util.getUserAgent(getContext(), "StepVideo");
+        String userAgent = Util.getUserAgent(getActivity(), "StepVideo");
         MediaSource mediaSource = new ExtractorMediaSource(mediaUri, new DefaultDataSourceFactory(
-                getContext(), userAgent), new DefaultExtractorsFactory(), null, null);
+                getActivity(), userAgent), new DefaultExtractorsFactory(), null, null);
         mExoPlayer.prepare(mediaSource);
-        mExoPlayer.setPlayWhenReady(true);
+        mExoPlayer.setPlayWhenReady(false);
     }
 
     private void releasePlayer() {

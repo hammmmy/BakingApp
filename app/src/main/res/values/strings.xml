@@ -10,5 +10,6 @@
     <string name="steps">Steps</string>
     <string name="previous">Previous</string>
     <string name="next">Next</string>
+    <string name="empty_detail_view">Select a step from the left pane</string>
 
 </resources>

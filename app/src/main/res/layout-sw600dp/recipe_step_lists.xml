@@ -3,16 +3,32 @@
     xmlns:tools="http://schemas.android.com/tools">
 
 
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginLeft="16dp"
+        android:layout_marginRight="16dp"
+        android:baselineAligned="false"
+        android:divider="?android:attr/dividerHorizontal"
+        android:orientation="horizontal"
+        android:showDividers="middle"
+        tools:context="org.ipforsmartobjects.apps.baking.steps.RecipeStepsListActivity">
+
+        <!--
+        This layout is a two-pane layout for the Recipes
+        master/detail flow.
+
+        -->
+
         <RelativeLayout
-            android:layout_width="match_parent"
+            android:layout_width="@dimen/item_width"
             android:layout_height="match_parent">
 
             <LinearLayout
                 android:id="@+id/list_container"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:orientation="vertical"
-                app:layout_behavior="@string/appbar_scrolling_view_behavior">
+                android:orientation="vertical">
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -26,9 +42,9 @@
                     android:id="@+id/ingredient_list"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:layout_marginBottom="@dimen/text_margin"
                     android:layout_marginLeft="@dimen/text_margin"
                     android:layout_marginRight="@dimen/text_margin"
-                    android:layout_marginBottom="@dimen/text_margin"
                     app:layoutManager="LinearLayoutManager"
                     tools:context="org.ipforsmartobjects.apps.baking.steps.RecipeStepsListActivity"
                     tools:listitem="@layout/recipe_ingredient_list_item" />
@@ -45,9 +61,9 @@
                     android:id="@+id/steps_list"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:layout_marginBottom="@dimen/text_margin"
                     android:layout_marginLeft="@dimen/text_margin"
                     android:layout_marginRight="@dimen/text_margin"
-                    android:layout_marginBottom="@dimen/text_margin"
                     app:layoutManager="LinearLayoutManager"
                     tools:context="org.ipforsmartobjects.apps.baking.steps.RecipeStepsListActivity"
                     tools:listitem="@layout/recipe_step_item" />
@@ -79,4 +95,20 @@
                 android:visibility="gone" />
 
         </RelativeLayout>
+
+        <FrameLayout
+            android:id="@+id/recipe_detail_container"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="3" >
+            <TextView
+                android:id="@+id/empty_detail_view"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_gravity="center"
+                android:text="@string/empty_detail_view"
+                android:textAppearance="@style/TextAppearance.AppCompat.Display1" />
+        </FrameLayout>
+
+    </LinearLayout>
 </layout>

@@ -56,7 +56,6 @@ public class RecipeStepsListActivity extends AppCompatActivity implements Recipe
         }
     };
     private RecipeStepsPresenter mActionsListener;
-    private SwipeRefreshLayout mSwipeRefreshLayout;
     private String mRecipeName;
 
     @Override
@@ -71,7 +70,7 @@ public class RecipeStepsListActivity extends AppCompatActivity implements Recipe
         setSupportActionBar(toolbar);
 //        toolbar.setTitle(getTitle());
 
-        if (savedInstanceState == null) {
+        if (getIntent() != null) {
             mRecipeId = (int) getIntent().getLongExtra(ARG_ITEM_ID, -1);
         }
 
@@ -90,14 +89,6 @@ public class RecipeStepsListActivity extends AppCompatActivity implements Recipe
 
 
         setupRecyclerViews();
-        mSwipeRefreshLayout = mBinding.stepsContainer.swipeRefreshLayout;
-        mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-            @Override
-            public void onRefresh() {
-                mActionsListener.loadSteps(true);
-                mSwipeRefreshLayout.setRefreshing(false);
-            }
-        });
     }
 
     @Override
@@ -118,7 +109,6 @@ public class RecipeStepsListActivity extends AppCompatActivity implements Recipe
     @Override
     public void setProgressIndicator(boolean active) {
         mBinding.stepsContainer.progress.setVisibility(active ? View.VISIBLE : View.GONE);
-
     }
 
     @Override
@@ -132,6 +122,7 @@ public class RecipeStepsListActivity extends AppCompatActivity implements Recipe
         mStepsAdapter.replaceData(mRecipeId, steps);
         mIngredientsAdapter.replaceData(ingredients);
         mTotalSteps = steps.size();
+
     }
 
     @Override

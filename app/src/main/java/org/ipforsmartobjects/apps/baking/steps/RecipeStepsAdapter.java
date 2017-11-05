@@ -1,11 +1,14 @@
 package org.ipforsmartobjects.apps.baking.steps;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.support.v7.widget.RecyclerView;
+import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import org.ipforsmartobjects.apps.baking.R;
 import org.ipforsmartobjects.apps.baking.data.Step;
 import org.ipforsmartobjects.apps.baking.databinding.RecipeStepItemBinding;
 
@@ -19,6 +22,7 @@ public class RecipeStepsAdapter extends RecyclerView.Adapter<RecipeStepsAdapter.
     private int mRecipeId;
     private List<Step> mSteps;
     private Context mContext;
+    private int mHighlightedPosition = -1;
 
     public RecipeStepsAdapter(int recipeId, List<Step> steps, RecipeStepsListActivity.RecipeStepsItemListener itemListener) {
         setList(recipeId, steps);
@@ -40,6 +44,18 @@ public class RecipeStepsAdapter extends RecyclerView.Adapter<RecipeStepsAdapter.
         viewHolder.mRecipeViewBinding.stepId.setText(""+step.getId()+". ");
 
         viewHolder.mRecipeViewBinding.shortDescription.setText(step.getShortDescription());
+
+        String highlightColor = "#3E2723";
+        if (position == mHighlightedPosition) {
+            viewHolder.mRecipeViewBinding.stepItemLayout
+                    .setBackgroundColor(Color.parseColor(highlightColor));
+        } else {
+            TypedValue typedValue = new TypedValue();
+            mContext.getTheme().resolveAttribute(R.attr.colorPrimary, typedValue, true);
+            int color = typedValue.data;
+
+            viewHolder.mRecipeViewBinding.stepItemLayout.setBackgroundColor(color);
+        }
     }
 
     public void replaceData(int recipeId, List<Step> steps) {
@@ -78,6 +94,8 @@ public class RecipeStepsAdapter extends RecyclerView.Adapter<RecipeStepsAdapter.
             int position = getAdapterPosition();
             Step step = getItem(position);
             mItemListener.onRecipeStepClick(mRecipeId, step);
+            mHighlightedPosition = position;
+            RecipeStepsAdapter.this.notifyDataSetChanged();
         }
     }
 }
