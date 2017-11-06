@@ -30,8 +30,8 @@ public class RecipeIngredientsAppWidget extends AppWidgetProvider {
             RemoteViews ingredientView = new RemoteViews(context.getPackageName(),
                     R.layout.recipe_ingredients_app_widget_item);
 
-            String ingredientStr = new StringBuilder().append(ingredient.getIngredient()).append(" ")
-                    .append(ingredient.getQuantity()).append(" ").append(ingredient.getMeasure()).toString();
+            String ingredientStr = ingredient.getIngredient() + " " +
+                    ingredient.getQuantity() + " " + ingredient.getMeasure();
 
             ingredientView.setTextViewText(R.id.ingredient_name, ingredientStr);
             views.addView(R.id.ingredients_container, ingredientView);

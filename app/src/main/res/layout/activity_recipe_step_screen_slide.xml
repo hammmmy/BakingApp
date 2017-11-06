@@ -29,10 +29,11 @@
                 android:drawableLeft="@drawable/ic_arrow_left"
                 android:drawableStart="@drawable/ic_arrow_left"
                 android:paddingRight="@dimen/text_margin"
+                android:paddingEnd="@dimen/text_margin"
                 android:background="@color/colorPrimary"
                 android:text="@string/previous"
                 android:textAppearance="@style/TextAppearance.AppCompat.Button"
-                />
+                android:layout_alignParentStart="true" />
 
             <android.support.v7.widget.AppCompatButton
                 android:id="@+id/next_button"
@@ -43,9 +44,12 @@
                 android:drawableEnd="@drawable/ic_arrow_right"
                 android:drawableRight="@drawable/ic_arrow_right"
                 android:paddingLeft="@dimen/text_margin"
+                android:paddingEnd="@dimen/text_margin"
                 android:background="@color/colorPrimary"
                 android:text="@string/next"
-                android:textAppearance="@style/TextAppearance.AppCompat.Button" />
+                android:textAppearance="@style/TextAppearance.AppCompat.Button"
+                android:layout_alignParentEnd="true"
+                android:paddingStart="@dimen/text_margin" />
 
         </RelativeLayout>
 

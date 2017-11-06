@@ -3,7 +3,6 @@ package org.ipforsmartobjects.apps.baking.steps;
 import android.content.Intent;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
-import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
@@ -38,7 +37,7 @@ public class RecipeStepsListActivity extends AppCompatActivity implements Recipe
      * device.
      */
     private boolean mTwoPane;
-    ActivityRecipeStepListBinding mBinding;
+    private ActivityRecipeStepListBinding mBinding;
     private int mRecipeId;
     private int mTotalSteps;
     private TextView mEmptyView;
@@ -49,7 +48,7 @@ public class RecipeStepsListActivity extends AppCompatActivity implements Recipe
     private RecyclerView mStepsList;
     private IngredientsAdapter mIngredientsAdapter;
     private RecipeStepsAdapter mStepsAdapter;
-    private RecipeStepsItemListener mItemsListener = new RecipeStepsItemListener() {
+    private final RecipeStepsItemListener mItemsListener = new RecipeStepsItemListener() {
         @Override
         public void onRecipeStepClick(int recipeId, Step clickedStep) {
             mActionsListener.openStepDetails(recipeId, clickedStep);

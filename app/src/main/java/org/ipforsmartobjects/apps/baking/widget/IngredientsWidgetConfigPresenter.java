@@ -49,7 +49,7 @@ public class IngredientsWidgetConfigPresenter implements IngredientsWidgetConfig
             });
         }
 
-    public static String toJson(ArrayList<Ingredient> jsonObject) {
+    private static String toJson(ArrayList<Ingredient> jsonObject) {
         return new Gson().toJson(jsonObject);
     }
 

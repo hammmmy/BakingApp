@@ -1,38 +1,23 @@
 package org.ipforsmartobjects.apps.baking.steppages;
 
-import android.content.Context;
 import android.content.res.Configuration;
-import android.support.annotation.NonNull;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
 import android.content.Intent;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
-import android.support.v4.app.FragmentPagerAdapter;
-import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.widget.AppCompatButton;
-import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.app.ActionBar;
 import android.support.v4.app.NavUtils;
 import android.view.MenuItem;
-import android.view.Window;
-import android.view.WindowManager;
 
 import org.ipforsmartobjects.apps.baking.Injection;
 import org.ipforsmartobjects.apps.baking.R;
-import org.ipforsmartobjects.apps.baking.data.Step;
 import org.ipforsmartobjects.apps.baking.databinding.ActivityRecipeStepScreenSlideBinding;
 import org.ipforsmartobjects.apps.baking.stepdetail.RecipeStepDetailFragment;
 import org.ipforsmartobjects.apps.baking.steps.RecipeStepsListActivity;
-
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * An activity representing a single Recipe detail screen. This
@@ -109,7 +94,7 @@ public class RecipeStepScreenSlideActivity extends AppCompatActivity implements 
 
     }
 
-    public void setLayoutVisibility(boolean visible) {
+    private void setLayoutVisibility(boolean visible) {
         ActionBar actionBar = getSupportActionBar();
         if(null != actionBar && !visible) {
             actionBar.hide();

@@ -39,7 +39,8 @@
                     android:layout_marginLeft="@dimen/text_margin"
                     android:text="@string/steps"
                     android:textAppearance="@style/TextAppearance.AppCompat.Large"
-                    tools:textColor="@android:color/black" />
+                    tools:textColor="@android:color/black"
+                    android:layout_marginStart="@dimen/text_margin" />
 
                 <android.support.v7.widget.RecyclerView
                     android:id="@+id/steps_list"

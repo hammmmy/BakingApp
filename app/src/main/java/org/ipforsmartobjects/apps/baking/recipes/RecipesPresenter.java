@@ -1,9 +1,6 @@
 package org.ipforsmartobjects.apps.baking.recipes;
 
-import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.support.v4.app.LoaderManager;
-import android.support.v4.content.Loader;
 
 import org.ipforsmartobjects.apps.baking.data.Recipe;
 import org.ipforsmartobjects.apps.baking.data.RepositoryContract;

@@ -31,7 +31,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_centerInParent="true"
-                    android:layout_margin="@dimen/text_margin"
+                    android:layout_marginHorizontal="@dimen/text_margin"
                     android:layout_toEndOf="@+id/recipe_icon"
                     android:layout_toRightOf="@+id/recipe_icon"
                     android:orientation="vertical">

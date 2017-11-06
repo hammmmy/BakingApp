@@ -17,7 +17,6 @@ public class RecipeStepDetailPresenter implements RecipeStepDetailContract.Prese
     private final RepositoryContract.RecipesRepository mRecipesRepository;
 
     private final RecipeStepDetailContract.View mRecipeStepDetailView;
-    private long mStepId;
     private Step mStep;
 
     public RecipeStepDetailPresenter(@NonNull RecipeStepDetailContract.View movieDetailView,
@@ -28,7 +27,6 @@ public class RecipeStepDetailPresenter implements RecipeStepDetailContract.Prese
 
     @Override
     public void openStep(int recipeId, final int stepId) {
-        mStepId = stepId;
         if (stepId == -1) {
             mRecipeStepDetailView.showEmptyView();
             return;

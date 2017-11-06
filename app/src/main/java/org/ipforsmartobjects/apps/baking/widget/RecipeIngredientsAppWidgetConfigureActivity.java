@@ -33,22 +33,18 @@ public class RecipeIngredientsAppWidgetConfigureActivity extends Activity implem
     private static final String PREFS_NAME = "org.ipforsmartobjects.apps.baking.widget.RecipeIngredientsAppWidget";
     private static final String PREF_PREFIX_KEY = "appwidget_";
     private static final String INGREDIENTS_PREF_PREFIX_KEY = "ingredients_appwidget_";
-    int mAppWidgetId = AppWidgetManager.INVALID_APPWIDGET_ID;
-    Spinner mRecipeNamesSpinner;
-    int mSelectedRecipeId;
-    String mSelectedRecipeName;
-    HashMap<String, List<Ingredient>> mIngredientsMap = new HashMap<>();
+    private int mAppWidgetId = AppWidgetManager.INVALID_APPWIDGET_ID;
+    private Spinner mRecipeNamesSpinner;
+    private final HashMap<String, List<Ingredient>> mIngredientsMap = new HashMap<>();
     private IngredientsWidgetConfigPresenter mActionsListener;
-//    EditText mAppWidgetText;
-    View.OnClickListener mOnClickListener = new View.OnClickListener() {
+    private final View.OnClickListener mOnClickListener = new View.OnClickListener() {
         public void onClick(View v) {
             String selectedRecipeName = mRecipeNamesSpinner.getSelectedItem().toString();
             mActionsListener.saveWidgetDetails(selectedRecipeName, mIngredientsMap.get(selectedRecipeName));
         }
     };
     private RecipeIngredientsAppWidgetConfigureBinding mBinding;
-    private ArrayList<String> mRecipeNames;
-    private List<Recipe> mRecipes;
+
 
 
     public RecipeIngredientsAppWidgetConfigureActivity() {
@@ -56,14 +52,14 @@ public class RecipeIngredientsAppWidgetConfigureActivity extends Activity implem
     }
 
     // Write the prefix to the SharedPreferences object for this widget
-    static void saveTitlePref(Context context, int appWidgetId, String text) {
+    private static void saveTitlePref(Context context, int appWidgetId, String text) {
         SharedPreferences.Editor prefs = context.getSharedPreferences(PREFS_NAME, 0).edit();
         prefs.putString(PREF_PREFIX_KEY + appWidgetId, text);
         prefs.apply();
     }
 
     // Write the prefix to the SharedPreferences object for this widget
-    static void saveIngredientsPref(Context context, int appWidgetId, String text) {
+    private static void saveIngredientsPref(Context context, int appWidgetId, String text) {
         SharedPreferences.Editor prefs = context.getSharedPreferences(PREFS_NAME, 0).edit();
         prefs.putString(INGREDIENTS_PREF_PREFIX_KEY + appWidgetId, text);
         prefs.apply();
@@ -81,7 +77,7 @@ public class RecipeIngredientsAppWidgetConfigureActivity extends Activity implem
         }
     }
 
-    static ArrayList<Ingredient> fromJson(String jsonString) {
+    private static ArrayList<Ingredient> fromJson(String jsonString) {
         Type type = new TypeToken<ArrayList<Ingredient>>(){}.getType();
         return new Gson().fromJson(jsonString, type);
     }
@@ -89,8 +85,7 @@ public class RecipeIngredientsAppWidgetConfigureActivity extends Activity implem
         SharedPreferences prefs = context.getSharedPreferences(PREFS_NAME, 0);
         String ingredientsListJson = prefs.getString(INGREDIENTS_PREF_PREFIX_KEY + appWidgetId, null);
         if (ingredientsListJson != null) {
-            ArrayList<Ingredient> ingredients = fromJson(ingredientsListJson);
-            return ingredients;
+            return fromJson(ingredientsListJson);
         } else {
             return new ArrayList<>();
         }
@@ -138,8 +133,6 @@ public class RecipeIngredientsAppWidgetConfigureActivity extends Activity implem
             finish();
             return;
         }
-
-//        mAppWidgetText.setText(loadTitlePref(RecipeIngredientsAppWidgetConfigureActivity.this, mAppWidgetId));
     }
 
 
@@ -150,15 +143,13 @@ public class RecipeIngredientsAppWidgetConfigureActivity extends Activity implem
 
     @Override
     public void showRecipes(List<Recipe> recipes) {
-        mRecipes = recipes;
         ArrayList<String> recipeNames = new ArrayList<>();
 
         for (Recipe recipe : recipes) {
             recipeNames.add(recipe.getName());
             mIngredientsMap.put(recipe.getName(), recipe.getIngredients());
         }
-        mRecipeNames = recipeNames;
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,android.R.layout.simple_spinner_item,recipeNames);
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, recipeNames);
         mRecipeNamesSpinner.setAdapter(adapter);
     }
 
@@ -168,7 +159,6 @@ public class RecipeIngredientsAppWidgetConfigureActivity extends Activity implem
         final Context context = RecipeIngredientsAppWidgetConfigureActivity.this;
 
         // When the button is clicked, store the string locally
-//            String widgetText = mAppWidgetText.getText().toString();
         saveTitlePref(context, mAppWidgetId, recipeName);
         saveIngredientsPref(context, mAppWidgetId, ingredients);
 

@@ -32,7 +32,9 @@
                 android:maxLines="2"
                 android:layout_toRightOf="@+id/step_id"
                 android:layout_toLeftOf="@+id/arrow"
-                tools:text="Cheese cake" />
+                tools:text="Cheese cake"
+                android:layout_toEndOf="@+id/step_id"
+                android:layout_toStartOf="@+id/arrow" />
 
             <ImageView
                 android:id="@+id/arrow"

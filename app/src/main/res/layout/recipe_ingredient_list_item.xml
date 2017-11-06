@@ -19,14 +19,17 @@
             android:maxLines="2"
             tools:text="Graham Cracker crumbs "
             android:layout_toLeftOf="@+id/ingredient_details"
-            tools:textColor="@android:color/black" />
+            tools:textColor="@android:color/black"
+            android:layout_alignParentStart="true"
+            android:layout_toStartOf="@+id/ingredient_details" />
 
         <LinearLayout
             android:id="@+id/ingredient_details"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="end"
-            android:layout_alignParentRight="true">
+            android:layout_alignParentRight="true"
+            android:layout_alignParentEnd="true">
 
             <TextView
                 android:id="@+id/ingredient_quantity"

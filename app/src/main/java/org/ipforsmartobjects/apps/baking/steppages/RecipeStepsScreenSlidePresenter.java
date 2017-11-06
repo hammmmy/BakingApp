@@ -3,7 +3,6 @@ package org.ipforsmartobjects.apps.baking.steppages;
 import android.support.annotation.NonNull;
 
 import org.ipforsmartobjects.apps.baking.data.RepositoryContract;
-import org.ipforsmartobjects.apps.baking.data.Step;
 import org.ipforsmartobjects.apps.baking.stepdetail.RecipeStepDetailFragment;
 
 import static com.google.common.base.Preconditions.checkNotNull;

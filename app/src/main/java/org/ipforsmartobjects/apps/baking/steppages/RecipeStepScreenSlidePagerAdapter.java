@@ -7,10 +7,6 @@ import android.support.v4.app.FragmentStatePagerAdapter;
 
 import org.ipforsmartobjects.apps.baking.stepdetail.RecipeStepDetailFragment;
 
-/**
- * Created by Hamid on 11/5/2017.
- */
-
 class RecipeStepScreenSlidePagerAdapter extends FragmentStatePagerAdapter {
     private final int mRecipeId;
     private final int mTotalSteps;

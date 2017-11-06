@@ -55,7 +55,8 @@
                     android:layout_marginLeft="@dimen/text_margin"
                     android:text="@string/steps"
                     android:textAppearance="@style/TextAppearance.AppCompat.Large"
-                    tools:textColor="@android:color/black" />
+                    tools:textColor="@android:color/black"
+                    android:layout_marginStart="@dimen/text_margin" />
 
                 <android.support.v7.widget.RecyclerView
                     android:id="@+id/steps_list"
@@ -100,7 +101,8 @@
             android:id="@+id/recipe_detail_container"
             android:layout_width="0dp"
             android:layout_height="match_parent"
-            android:layout_weight="3" >
+            android:layout_weight="3"
+            tools:ignore="InconsistentLayout">
             <TextView
                 android:id="@+id/empty_detail_view"
                 android:layout_width="match_parent"
