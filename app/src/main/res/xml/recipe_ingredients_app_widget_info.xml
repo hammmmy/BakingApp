@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <appwidget-provider xmlns:android="http://schemas.android.com/apk/res/android"
     android:configure="org.ipforsmartobjects.apps.baking.widget.RecipeIngredientsAppWidgetConfigureActivity"
-    android:initialKeyguardLayout="@layout/recipe_ingredients_app_widget_gridview"
-    android:initialLayout="@layout/recipe_ingredients_app_widget_gridview"
+    android:initialKeyguardLayout="@layout/recipe_ingredients_app_widget_view"
+    android:initialLayout="@layout/recipe_ingredients_app_widget_view"
     android:minHeight="250dp"
     android:minWidth="250dp"
-    android:previewImage="@drawable/example_appwidget_preview"
+    android:previewImage="@drawable/ingredients_appwidget_preview"
     android:resizeMode="vertical"
     android:updatePeriodMillis="86400000"
     android:widgetCategory="home_screen"></appwidget-provider>

@@ -5,44 +5,51 @@ import android.appwidget.AppWidgetManager;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.EditText;
-import android.widget.RadioGroup;
+import android.widget.ArrayAdapter;
+import android.widget.Spinner;
 
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
+
+import org.ipforsmartobjects.apps.baking.Injection;
 import org.ipforsmartobjects.apps.baking.R;
+import org.ipforsmartobjects.apps.baking.data.Ingredient;
+import org.ipforsmartobjects.apps.baking.data.Recipe;
+import org.ipforsmartobjects.apps.baking.databinding.RecipeIngredientsAppWidgetConfigureBinding;
+
+import java.lang.reflect.Type;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
 
 /**
  * The configuration screen for the {@link RecipeIngredientsAppWidget RecipeIngredientsAppWidget} AppWidget.
  */
-public class RecipeIngredientsAppWidgetConfigureActivity extends Activity {
+public class RecipeIngredientsAppWidgetConfigureActivity extends Activity implements IngredientsWidgetConfigContract.View {
 
     private static final String PREFS_NAME = "org.ipforsmartobjects.apps.baking.widget.RecipeIngredientsAppWidget";
     private static final String PREF_PREFIX_KEY = "appwidget_";
+    private static final String INGREDIENTS_PREF_PREFIX_KEY = "ingredients_appwidget_";
     int mAppWidgetId = AppWidgetManager.INVALID_APPWIDGET_ID;
-    RadioGroup mRecipeNames;
+    Spinner mRecipeNamesSpinner;
     int mSelectedRecipeId;
     String mSelectedRecipeName;
+    HashMap<String, List<Ingredient>> mIngredientsMap = new HashMap<>();
+    private IngredientsWidgetConfigPresenter mActionsListener;
 //    EditText mAppWidgetText;
     View.OnClickListener mOnClickListener = new View.OnClickListener() {
         public void onClick(View v) {
-            final Context context = RecipeIngredientsAppWidgetConfigureActivity.this;
-
-            // When the button is clicked, store the string locally
-//            String widgetText = mAppWidgetText.getText().toString();
-            saveTitlePref(context, mAppWidgetId, mSelectedRecipeName);
-
-            // It is the responsibility of the configuration activity to update the app widget
-            AppWidgetManager appWidgetManager = AppWidgetManager.getInstance(context);
-            RecipeIngredientsAppWidget.updateAppWidget(context, appWidgetManager, mAppWidgetId);
-
-            // Make sure we pass back the original appWidgetId
-            Intent resultValue = new Intent();
-            resultValue.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, mAppWidgetId);
-            setResult(RESULT_OK, resultValue);
-            finish();
+            String selectedRecipeName = mRecipeNamesSpinner.getSelectedItem().toString();
+            mActionsListener.saveWidgetDetails(selectedRecipeName, mIngredientsMap.get(selectedRecipeName));
         }
     };
+    private RecipeIngredientsAppWidgetConfigureBinding mBinding;
+    private ArrayList<String> mRecipeNames;
+    private List<Recipe> mRecipes;
+
 
     public RecipeIngredientsAppWidgetConfigureActivity() {
         super();
@@ -52,6 +59,13 @@ public class RecipeIngredientsAppWidgetConfigureActivity extends Activity {
     static void saveTitlePref(Context context, int appWidgetId, String text) {
         SharedPreferences.Editor prefs = context.getSharedPreferences(PREFS_NAME, 0).edit();
         prefs.putString(PREF_PREFIX_KEY + appWidgetId, text);
+        prefs.apply();
+    }
+
+    // Write the prefix to the SharedPreferences object for this widget
+    static void saveIngredientsPref(Context context, int appWidgetId, String text) {
+        SharedPreferences.Editor prefs = context.getSharedPreferences(PREFS_NAME, 0).edit();
+        prefs.putString(INGREDIENTS_PREF_PREFIX_KEY + appWidgetId, text);
         prefs.apply();
     }
 
@@ -67,9 +81,30 @@ public class RecipeIngredientsAppWidgetConfigureActivity extends Activity {
         }
     }
 
+    static ArrayList<Ingredient> fromJson(String jsonString) {
+        Type type = new TypeToken<ArrayList<Ingredient>>(){}.getType();
+        return new Gson().fromJson(jsonString, type);
+    }
+    static ArrayList<Ingredient> loadIngredientsPref(Context context, int appWidgetId) {
+        SharedPreferences prefs = context.getSharedPreferences(PREFS_NAME, 0);
+        String ingredientsListJson = prefs.getString(INGREDIENTS_PREF_PREFIX_KEY + appWidgetId, null);
+        if (ingredientsListJson != null) {
+            ArrayList<Ingredient> ingredients = fromJson(ingredientsListJson);
+            return ingredients;
+        } else {
+            return new ArrayList<>();
+        }
+    }
+
     static void deleteTitlePref(Context context, int appWidgetId) {
         SharedPreferences.Editor prefs = context.getSharedPreferences(PREFS_NAME, 0).edit();
         prefs.remove(PREF_PREFIX_KEY + appWidgetId);
+        prefs.apply();
+    }
+
+    static void deleteIngredientsPref(Context context, int appWidgetId) {
+        SharedPreferences.Editor prefs = context.getSharedPreferences(PREFS_NAME, 0).edit();
+        prefs.remove(INGREDIENTS_PREF_PREFIX_KEY + appWidgetId);
         prefs.apply();
     }
 
@@ -81,11 +116,15 @@ public class RecipeIngredientsAppWidgetConfigureActivity extends Activity {
         // out of the widget placement if the user presses the back button.
         setResult(RESULT_CANCELED);
 
-        setContentView(R.layout.recipe_ingredients_app_widget_configure);
-        mRecipeNames = (RadioGroup) findViewById(R.id.recipe_radiogroup);
-        findViewById(R.id.add_button).setOnClickListener(mOnClickListener);
-// TODO: 11/6/2017 get data from repository
+        mBinding = DataBindingUtil.setContentView(RecipeIngredientsAppWidgetConfigureActivity.this,
+                R.layout.recipe_ingredients_app_widget_configure);
+        mRecipeNamesSpinner = mBinding.recipeSelector;
 
+        mBinding.addButton.setOnClickListener(mOnClickListener);
+
+        mActionsListener = new IngredientsWidgetConfigPresenter(this, Injection.provideRecipesRepository());
+
+        mActionsListener.loadRecipes(false);
         // Find the widget id from the intent.
         Intent intent = getIntent();
         Bundle extras = intent.getExtras();
@@ -101,6 +140,47 @@ public class RecipeIngredientsAppWidgetConfigureActivity extends Activity {
         }
 
 //        mAppWidgetText.setText(loadTitlePref(RecipeIngredientsAppWidgetConfigureActivity.this, mAppWidgetId));
+    }
+
+
+    @Override
+    public void disableSubmitButton(boolean disable) {
+        mBinding.addButton.setEnabled(!disable);
+    }
+
+    @Override
+    public void showRecipes(List<Recipe> recipes) {
+        mRecipes = recipes;
+        ArrayList<String> recipeNames = new ArrayList<>();
+
+        for (Recipe recipe : recipes) {
+            recipeNames.add(recipe.getName());
+            mIngredientsMap.put(recipe.getName(), recipe.getIngredients());
+        }
+        mRecipeNames = recipeNames;
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,android.R.layout.simple_spinner_item,recipeNames);
+        mRecipeNamesSpinner.setAdapter(adapter);
+    }
+
+    @Override
+    public void saveWidgetDetails(String recipeName, String ingredients) {
+
+        final Context context = RecipeIngredientsAppWidgetConfigureActivity.this;
+
+        // When the button is clicked, store the string locally
+//            String widgetText = mAppWidgetText.getText().toString();
+        saveTitlePref(context, mAppWidgetId, recipeName);
+        saveIngredientsPref(context, mAppWidgetId, ingredients);
+
+        // It is the responsibility of the configuration activity to update the app widget
+        AppWidgetManager appWidgetManager = AppWidgetManager.getInstance(context);
+        RecipeIngredientsAppWidget.updateAppWidget(context, appWidgetManager, mAppWidgetId);
+
+        // Make sure we pass back the original appWidgetId
+        Intent resultValue = new Intent();
+        resultValue.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, mAppWidgetId);
+        setResult(RESULT_OK, resultValue);
+        finish();
     }
 }
 

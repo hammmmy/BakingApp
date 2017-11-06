@@ -12,16 +12,13 @@
         android:layout_height="wrap_content"
         android:layout_margin="8dp"
         android:textColor="@color/colorAccent"
+        android:textAppearance="@style/TextAppearance.AppCompat.Large"
         tools:text="Chocolate Pie" />
 
-    <GridView
+    <LinearLayout
+        android:id="@+id/ingredients_container"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="4dp"
-        android:columnWidth="23dp"
-        android:horizontalSpacing="5dp"
-        android:numColumns="1"
-        android:verticalSpacing="5dp" />
-
+        android:orientation="vertical"/>
 
 </LinearLayout>

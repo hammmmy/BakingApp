@@ -6,6 +6,9 @@ import android.content.Context;
 import android.widget.RemoteViews;
 
 import org.ipforsmartobjects.apps.baking.R;
+import org.ipforsmartobjects.apps.baking.data.Ingredient;
+
+import java.util.ArrayList;
 
 /**
  * Implementation of App Widget functionality.
@@ -17,11 +20,22 @@ public class RecipeIngredientsAppWidget extends AppWidgetProvider {
                                 int appWidgetId) {
 
         CharSequence widgetText = RecipeIngredientsAppWidgetConfigureActivity.loadTitlePref(context, appWidgetId);
-        // Construct the RemoteViews object
-        RemoteViews views = new RemoteViews(context.getPackageName(), R.layout.recipe_ingredients_app_widget_gridview);
-        views.setTextViewText(R.id.recipe_name, widgetText);
+        ArrayList<Ingredient> ingredients = RecipeIngredientsAppWidgetConfigureActivity.loadIngredientsPref(context, appWidgetId);
 
-        // TODO: 11/6/2017 add gridview
+        RemoteViews views = new RemoteViews(context.getPackageName(), R.layout.recipe_ingredients_app_widget_view);
+        views.setTextViewText(R.id.recipe_name, widgetText);
+        views.removeAllViews(R.id.ingredients_container);
+
+        for (Ingredient ingredient : ingredients) {
+            RemoteViews ingredientView = new RemoteViews(context.getPackageName(),
+                    R.layout.recipe_ingredients_app_widget_item);
+
+            String ingredientStr = new StringBuilder().append(ingredient.getIngredient()).append(" ")
+                    .append(ingredient.getQuantity()).append(" ").append(ingredient.getMeasure()).toString();
+
+            ingredientView.setTextViewText(R.id.ingredient_name, ingredientStr);
+            views.addView(R.id.ingredients_container, ingredientView);
+        }
 
         // Instruct the widget manager to update the widget
         appWidgetManager.updateAppWidget(appWidgetId, views);
@@ -40,6 +54,7 @@ public class RecipeIngredientsAppWidget extends AppWidgetProvider {
         // When the user deletes the widget, delete the preference associated with it.
         for (int appWidgetId : appWidgetIds) {
             RecipeIngredientsAppWidgetConfigureActivity.deleteTitlePref(context, appWidgetId);
+            RecipeIngredientsAppWidgetConfigureActivity.deleteIngredientsPref(context, appWidgetId);
         }
     }
 
