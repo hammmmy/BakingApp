@@ -59,6 +59,8 @@ public class RecipeStepDetailFragment extends Fragment implements RecipeStepDeta
     public static final String ARG_RECIPE_NAME = "recipe_name";
     private static final String SELECTED_POSITION = "selected_position";
 
+    private static final String IS_VIDEO_PLAYING = "is_video_playing";
+
     private int mRecipeId;
     private int mStepId;
     private RecipeStepDetailBinding mBinding;
@@ -75,6 +77,7 @@ public class RecipeStepDetailFragment extends Fragment implements RecipeStepDeta
     private SimpleExoPlayerView mExoPlayerView;
     private boolean mIsTwoPane;
     private long mPosition = -1;
+    private boolean mIsVideoPlaying = false;
 
     /**
      * Mandatory empty constructor for the fragment manager to instantiate the
@@ -115,6 +118,7 @@ public class RecipeStepDetailFragment extends Fragment implements RecipeStepDeta
 
         if (savedInstanceState != null) {
             mPosition = savedInstanceState.getLong(SELECTED_POSITION, -1);
+            mIsVideoPlaying = savedInstanceState.getBoolean(IS_VIDEO_PLAYING, false);
         }
         mActionsListener.openStep(mRecipeId, mStepId);
 
@@ -135,6 +139,8 @@ public class RecipeStepDetailFragment extends Fragment implements RecipeStepDeta
     @Override
     public void onSaveInstanceState(Bundle outState) {
         outState.putLong(SELECTED_POSITION, mPosition);
+        outState.putBoolean(IS_VIDEO_PLAYING, mIsVideoPlaying);
+
         super.onSaveInstanceState(outState);
     }
 
@@ -187,6 +193,7 @@ public class RecipeStepDetailFragment extends Fragment implements RecipeStepDeta
         super.onPause();
         if (mExoPlayer != null) {
             mPosition = mExoPlayer.getCurrentPosition();
+            mIsVideoPlaying = mExoPlayer.getPlayWhenReady();
         }
         releasePlayer();
     }
@@ -240,9 +247,9 @@ public class RecipeStepDetailFragment extends Fragment implements RecipeStepDeta
         MediaSource mediaSource = new ExtractorMediaSource(mediaUri, new DefaultDataSourceFactory(
                 getActivity(), userAgent), new DefaultExtractorsFactory(), null, null);
         mExoPlayer.prepare(mediaSource);
-        mExoPlayer.setPlayWhenReady(false);
+        mExoPlayer.setPlayWhenReady(mIsVideoPlaying);
 
-        if (mPosition != -1) {
+        if (mPosition > 0) {
             mExoPlayer.seekTo(mPosition);
         }
     }
