@@ -185,7 +185,9 @@ public class RecipeStepDetailFragment extends Fragment implements RecipeStepDeta
     @Override
     public void onPause() {
         super.onPause();
-        mPosition = mExoPlayer.getCurrentPosition();
+        if (mExoPlayer != null) {
+            mPosition = mExoPlayer.getCurrentPosition();
+        }
         releasePlayer();
     }
 
