@@ -3,6 +3,7 @@ package org.ipforsmartobjects.apps.baking.steps;
 import android.content.Intent;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
@@ -32,6 +33,8 @@ import java.util.List;
 public class RecipeStepsListActivity extends AppCompatActivity implements RecipeStepsContract.View {
 
     public static final String ARG_ITEM_ID = "recipe_item_id";
+    private static final String KEY_STEPS_LIST_STATE = "key_steps_recycler_state";
+    private static final String KEY_INGREDIENTS_LIST_STATE = "key_ingredients_recycler_state";
     /**
      * Whether or not the activity is in two-pane mode, i.e. running on a tablet
      * device.
@@ -56,6 +59,8 @@ public class RecipeStepsListActivity extends AppCompatActivity implements Recipe
     };
     private RecipeStepsPresenter mActionsListener;
     private String mRecipeName;
+    private Parcelable mStepsListState;
+    private Parcelable mIngrdientsListState;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -90,10 +95,40 @@ public class RecipeStepsListActivity extends AppCompatActivity implements Recipe
         setupRecyclerViews();
     }
 
+
     @Override
     protected void onResume() {
         mActionsListener.loadSteps(false);
+        if (mStepsListState != null) {
+            mStepsList.getLayoutManager().onRestoreInstanceState(mStepsListState);
+        }
+
+        if (mIngrdientsListState != null) {
+            mIngredientsList.getLayoutManager().onRestoreInstanceState(mIngrdientsListState);
+        }
         super.onResume();
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle state) {
+        super.onSaveInstanceState(state);
+
+        // Save list state
+        mStepsListState = mStepsList.getLayoutManager().onSaveInstanceState();
+        state.putParcelable(KEY_STEPS_LIST_STATE, mStepsListState);
+        mIngrdientsListState = mIngredientsList.getLayoutManager().onSaveInstanceState();
+        state.putParcelable(KEY_INGREDIENTS_LIST_STATE, mIngrdientsListState);
+
+    }
+
+    protected void onRestoreInstanceState(Bundle state) {
+        super.onRestoreInstanceState(state);
+
+        // Retrieve list state and list/item positions
+        if(state != null) {
+            mStepsListState = state.getParcelable(KEY_STEPS_LIST_STATE);
+            mIngrdientsListState = state.getParcelable(KEY_INGREDIENTS_LIST_STATE);
+        }
     }
 
     private void setupRecyclerViews() {

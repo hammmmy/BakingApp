@@ -57,6 +57,7 @@ public class RecipeStepDetailFragment extends Fragment implements RecipeStepDeta
     public static final String ARG_TOTAL_STEPS = "total_steps";
 
     public static final String ARG_RECIPE_NAME = "recipe_name";
+    private static final String SELECTED_POSITION = "selected_position";
 
     private int mRecipeId;
     private int mStepId;
@@ -73,6 +74,7 @@ public class RecipeStepDetailFragment extends Fragment implements RecipeStepDeta
     private PlaybackStateCompat.Builder mPlaybackStateBuilder;
     private SimpleExoPlayerView mExoPlayerView;
     private boolean mIsTwoPane;
+    private long mPosition = -1;
 
     /**
      * Mandatory empty constructor for the fragment manager to instantiate the
@@ -111,6 +113,9 @@ public class RecipeStepDetailFragment extends Fragment implements RecipeStepDeta
         mIsTwoPane = getResources().getBoolean(R.bool.is_two_pane);
 
 
+        if (savedInstanceState != null) {
+            mPosition = savedInstanceState.getLong(SELECTED_POSITION, -1);
+        }
         mActionsListener.openStep(mRecipeId, mStepId);
 
         return mBinding.getRoot();
@@ -125,6 +130,12 @@ public class RecipeStepDetailFragment extends Fragment implements RecipeStepDeta
     public void showEmptyView() {
         mDetailView.setVisibility(View.GONE);
         mEmptyView.setVisibility(View.VISIBLE);
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        outState.putLong(SELECTED_POSITION, mPosition);
+        super.onSaveInstanceState(outState);
     }
 
     @Override
@@ -174,6 +185,7 @@ public class RecipeStepDetailFragment extends Fragment implements RecipeStepDeta
     @Override
     public void onPause() {
         super.onPause();
+        mPosition = mExoPlayer.getCurrentPosition();
         releasePlayer();
     }
 
@@ -227,6 +239,10 @@ public class RecipeStepDetailFragment extends Fragment implements RecipeStepDeta
                 getActivity(), userAgent), new DefaultExtractorsFactory(), null, null);
         mExoPlayer.prepare(mediaSource);
         mExoPlayer.setPlayWhenReady(false);
+
+        if (mPosition != -1) {
+            mExoPlayer.seekTo(mPosition);
+        }
     }
 
     private void releasePlayer() {

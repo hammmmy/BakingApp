@@ -70,30 +70,6 @@
                     tools:listitem="@layout/recipe_step_item" />
             </LinearLayout>
 
-            <ProgressBar
-                android:id="@+id/progress"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerInParent="true"
-                android:visibility="gone" />
-
-            <TextView
-                android:id="@+id/empty_view"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerInParent="true"
-                android:text="@string/no_recipes"
-                android:textAppearance="@style/TextAppearance.AppCompat.Display1"
-                android:visibility="gone" />
-
-            <TextView
-                android:id="@+id/error_view"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerInParent="true"
-                android:text="@string/loading_failed"
-                android:textAppearance="@style/TextAppearance.AppCompat.Display1"
-                android:visibility="gone" />
 
         </RelativeLayout>
 
@@ -111,6 +87,31 @@
                 android:text="@string/empty_detail_view"
                 android:textAppearance="@style/TextAppearance.AppCompat.Display1" />
         </FrameLayout>
+
+        <ProgressBar
+            android:id="@+id/progress"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:visibility="gone" />
+
+        <TextView
+            android:id="@+id/empty_view"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:text="@string/no_recipes"
+            android:textAppearance="@style/TextAppearance.AppCompat.Display1"
+            android:visibility="gone" />
+
+        <TextView
+            android:id="@+id/error_view"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:text="@string/loading_failed"
+            android:textAppearance="@style/TextAppearance.AppCompat.Display1"
+            android:visibility="gone" />
 
     </LinearLayout>
 </layout>
